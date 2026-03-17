@@ -1,0 +1,137 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Admin Users (Dashboard Access) ─────────────────────
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+// ── Telegram Bot Users ─────────────────────────────────
+model TelegramUser {
+  id           String   @id @default(cuid())
+  telegramId   BigInt   @unique @map("telegram_id")
+  username     String?
+  firstName    String?  @map("first_name")
+  lastName     String?  @map("last_name")
+  isActive     Boolean  @default(true) @map("is_active")
+  language     String   @default("uz")
+  subscribedAt DateTime @default(now()) @map("subscribed_at")
+  lastActiveAt DateTime @default(now()) @map("last_active_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  requests UserRequest[]
+
+  @@index([isActive])
+  @@index([subscribedAt])
+  @@map("telegram_users")
+}
+
+// ── User Bot Request Logs ──────────────────────────────
+model UserRequest {
+  id        String       @id @default(cuid())
+  userId    String       @map("user_id")
+  user      TelegramUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  command   String
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([command])
+  @@map("user_requests")
+}
+
+// ── Banks Registry ─────────────────────────────────────
+model Bank {
+  id        String       @id @default(cuid())
+  code      String       @unique
+  name      String
+  nameUz    String       @map("name_uz")
+  website   String?
+  logoUrl   String?      @map("logo_url")
+  isActive  Boolean      @default(true) @map("is_active")
+  isCentral Boolean      @default(false) @map("is_central")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  rates     ExchangeRate[]
+
+  @@index([isActive])
+  @@map("banks")
+}
+
+// ── Exchange Rate Records ──────────────────────────────
+model ExchangeRate {
+  id        String   @id @default(cuid())
+  bankId    String   @map("bank_id")
+  bank      Bank     @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  currency  String
+  code      String
+  buyRate   Float?   @map("buy_rate")
+  sellRate  Float?   @map("sell_rate")
+  cbRate    Float?   @map("cb_rate")
+  date      DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([bankId, code, date], name: "unique_bank_currency_date")
+  @@index([bankId, currency, date])
+  @@index([code, date])
+  @@index([date])
+  @@map("exchange_rates")
+}
+
+// ── Scraping Activity Logs ─────────────────────────────
+model ScrapeLog {
+  id         String       @id @default(cuid())
+  bankCode   String       @map("bank_code")
+  status     ScrapeStatus
+  message    String?
+  duration   Int?         // milliseconds
+  ratesCount Int?         @map("rates_count")
+  createdAt  DateTime     @default(now()) @map("created_at")
+
+  @@index([bankCode])
+  @@index([createdAt])
+  @@index([status])
+  @@map("scrape_logs")
+}
+
+// ── Daily Aggregated Stats ─────────────────────────────
+model DailyStats {
+  id            String   @id @default(cuid())
+  date          DateTime @unique
+  totalUsers    Int      @default(0) @map("total_users")
+  activeUsers   Int      @default(0) @map("active_users")
+  newUsers      Int      @default(0) @map("new_users")
+  totalRequests Int      @default(0) @map("total_requests")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([date])
+  @@map("daily_stats")
+}
+
+// ── Enums ──────────────────────────────────────────────
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+}
+
+enum ScrapeStatus {
+  SUCCESS
+  FAILED
+  PARTIAL
+}

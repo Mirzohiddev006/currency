@@ -1,0 +1,5 @@
+2026-03-16 18:56:37 [[31merror[39m]: PrismaClientInitializationError: Authentication failed against database server at `localhost`, the provided database credentials for `postgres` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+    at t (C:\Users\Mirzohid\Downloads\currency-tracker\server\node_modules\@prisma\client\runtime\library.js:112:2488)
+    at async bootstrap (C:\Users\Mirzohid\Downloads\currency-tracker\server\dist\index.js:76:9)
