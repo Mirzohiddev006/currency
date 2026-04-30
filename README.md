@@ -1,139 +1,97 @@
-# Currency Tracker
+# Currency Tracker - To'liq Loyiha
 
-Uzbekistan bank exchange rates tracker with:
+O'zbekiston banklarining valyuta kurslarini kuzatuvchi tizim. Webapp, Admin Panel, API va Telegram Botni o'z ichiga oladi.
 
-- `server/`: Express API, Prisma, scheduler, Telegram bot, bank scrapers
-- `client/`: React + Vite admin panel
-- `docker-compose.yml`: ready-to-run production-like stack
+## 🚀 Tezkor Ishga Tushirish
 
-## Stack
-
-- Backend: Node.js, Express, TypeScript, Prisma, PostgreSQL
-- Frontend: React, Vite, TypeScript, Tailwind CSS, Recharts
-- Jobs: `node-cron`
-- Bot: Telegraf
-
-## Project Structure
-
-```text
-currency-tracker/
-|-- client/
-|   |-- src/
-|   |-- Dockerfile
-|   `-- nginx.conf
-|-- server/
-|   |-- prisma/
-|   |-- src/
-|   |-- Dockerfile
-|   `-- docker-entrypoint.sh
-|-- .env.example
-`-- docker-compose.yml
-```
-
-## Local Development
-
-1. Copy env file:
+### 1. Docker Compose orqali (Tavsiya etiladi)
 
 ```bash
+# .env faylini sozlang (kerak bo'lsa)
 cp .env.example .env
-```
 
-2. For local database usage, change `DATABASE_URL` in `.env` to use `localhost` instead of `postgres`.
-
-3. Install dependencies:
-
-```bash
-cd server && npm install
-cd ../client && npm install
-```
-
-4. Prepare database:
-
-```bash
-cd server
-npm run db:generate
-npm run db:push
-npm run db:seed
-```
-
-5. Start services:
-
-```bash
-cd server
-npm run dev
-```
-
-```bash
-cd client
-npm run dev
-```
-
-## Docker Deployment
-
-1. Copy env file:
-
-```bash
-cp .env.example .env
-```
-
-2. Fill these values in `.env`:
-
-- `JWT_SECRET`
-- `ADMIN_EMAIL`
-- `ADMIN_PASSWORD`
-- `CLIENT_URL`
-- `TELEGRAM_BOT_TOKEN` if you want the bot enabled
-
-3. Start the stack:
-
-```bash
+# Barcha servislarni ishga tushirish
 docker compose up -d --build
+
+# Loglarni ko'rish
+docker compose logs -f
 ```
 
-4. Endpoints:
+**Kirish manzillari:**
+- Webapp (Foydalanuvchilar): http://localhost
+- Admin Panel: http://localhost/admin
+- API: http://localhost/api
+- PostgreSQL: localhost:5432
 
-- Admin panel: `http://localhost:3000`
-- API: `http://localhost:5000/api`
-- Health: `http://localhost:3000/health`
+### 2. Render.com ga joylashtirish
 
-The backend container waits for PostgreSQL, applies Prisma schema with `db push`, seeds the admin user and banks, then starts the server.
+1. GitHub repongizni yarating va kodlarni yuklang
+2. Render.com da yangi "Web Service" yarating
+3. Repongizni ulang
+4. Quyidagi environment variables ni sozlang:
+   - `POSTGRES_DB` - baza nomi
+   - `POSTGRES_USER` - foydalanuvchi
+   - `POSTGRES_PASSWORD` - parol
+   - `DATABASE_URL` - to'liq PostgreSQL URL (Render avtomatik beradi)
+   - `JWT_SECRET` - maxfiy kalit (32+ belgi)
+   - `TELEGRAM_BOT_TOKEN` - Telegram bot token (ixtiyoriy)
+   - `ADMIN_EMAIL` - admin email
+   - `ADMIN_PASSWORD` - admin parol
 
-## Environment Variables
+5. Deploy tugmasini bosing
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `JWT_SECRET` | Yes | Minimum 32-character secret |
-| `ADMIN_EMAIL` | Yes | Initial admin login |
-| `ADMIN_PASSWORD` | Yes | Initial admin password |
-| `CLIENT_URL` | Yes | Allowed frontend origin for CORS |
-| `SCRAPE_INTERVAL` | No | Cron schedule for rate refresh |
-| `TELEGRAM_BOT_TOKEN` | No | Enables Telegram bot when set |
-| `TELEGRAM_WEBHOOK_URL` | No | Webhook URL for Telegram |
+## 📁 Loyiha Tuzilishi
 
-## Available API Routes
+```
+/workspace
+├── server/          # Backend API + Telegram Bot
+├── client/          # Admin Panel
+├── webapp/          # Foydalanuvchilar uchun Web App
+├── Dockerfile       # Barchasini birlashtiruvchi multi-stage build
+├── docker-compose.yml
+└── .env             # Sozlamalar
+```
 
-Public:
+## 🔧 Environment Variables
 
-- `GET /api/rates`
-- `GET /api/rates/:code`
-- `GET /api/rates/history/:bankCode/:currency?days=30`
+`.env` faylida quyidagi o'zgaruvchilar mavjud:
 
-Protected:
+```env
+POSTGRES_DB=currency_tracker
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+DATABASE_URL=postgresql://postgres:password@postgres:5432/currency_tracker
+JWT_SECRET=change_this_to_a_long_random_secret_key_32_chars_min
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+ADMIN_EMAIL=admin@currency.uz
+ADMIN_PASSWORD=Admin@12345
+```
 
-- `POST /api/auth/login`
-- `GET /api/auth/me`
-- `POST /api/admin/refresh`
-- `GET /api/admin/stats`
-- `GET /api/admin/users`
-- `GET /api/admin/banks`
-- `PATCH /api/admin/banks/:id/toggle`
-- `GET /api/admin/logs`
-- `GET /api/admin/analytics`
+## 🛠 Qo'shimcha Buyruqlar
 
-## Notes
+```bash
+# To'xtatish
+docker compose down
 
-- Frontend production build is code-split and served by Nginx.
-- `/api` and `/health` are proxied from Nginx to the backend container.
-- Telegram bot is optional now; if token is missing, the API and admin panel still run.
-- Seed is idempotent for admin and bank records.
+# Loglarni ko'rish
+docker compose logs -f app
+
+# Bazaga ulanish
+docker compose exec postgres psql -U postgres -d currency_tracker
+
+# Qayta ishga tushirish
+docker compose restart
+```
+
+## 🌐 Xususiyatlar
+
+- ✅ Real-time valyuta kurslari (CBU dan avtomatik yuklanadi)
+- ✅ Admin panel orqali boshqarish
+- ✅ Telegram bot orqali bildirishnomalar
+- ✅ Responsive web dizayn
+- ✅ JWT autentifikatsiya
+- ✅ Docker orqali oson deploy
+
+## 📞 Support
+
+Muammolar yuzaga kelsa, issue oching yoki dokumentatsiyani o'qing.

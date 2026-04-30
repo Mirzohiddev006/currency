@@ -14,9 +14,10 @@ services:
       timeout: 5s
       retries: 5
 
-  server:
+  app:
     build:
-      context: ./server
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
       - ./.env
@@ -24,27 +25,11 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "5000:5000"
-
-  client:
-    build:
-      context: ./client
-    restart: unless-stopped
-    depends_on:
-      - server
-    ports:
-      - "3000:80"
-
-  webapp:
-    build:
-      context: ./webapp
-    restart: unless-stopped
-    depends_on:
-      - server
-    ports:
-      - "5173:5173"
+      - "80:80"
     environment:
-      - VITE_API_URL=http://localhost:5000/api
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-currency_tracker}
+      - CLIENT_URL=http://localhost
+      - VITE_API_URL=/api
 
 volumes:
   postgres_data:
