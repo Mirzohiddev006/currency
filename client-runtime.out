@@ -1,7 +1,0 @@
-
-> currency-tracker-client@1.0.0 preview
-> vite preview --host 0.0.0.0 --port 3000
-
-  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://169.254.199.54:[1m3000[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.1.5:[1m3000[22m/[39m

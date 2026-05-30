@@ -1,0 +1,52 @@
+# ════════════════════════════════════════════════════════════
+# Render.com Blueprint — Currency Tracker Backend
+# Repo'ni Render'ga ulaganda bu fayl avtomatik o'qiladi va
+# PostgreSQL bazasi + Backend web service yaratiladi.
+# Hujjat: https://render.com/docs/blueprint-spec
+# ════════════════════════════════════════════════════════════
+
+databases:
+  - name: currency-tracker-db
+    databaseName: currency_tracker
+    user: currency
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    name: currency-tracker-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # DATABASE_URL Render tomonidan avtomatik to'ldiriladi (yuqoridagi bazadan)
+      - key: DATABASE_URL
+        fromDatabase:
+          name: currency-tracker-db
+          property: connectionString
+      # JWT maxfiy kaliti — Render avtomatik tasodifiy generatsiya qiladi
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # Frontend hali deploy qilinmagan; CORS uchun. Keyin frontend manzilini qo'ying.
+      - key: CLIENT_URL
+        value: "*"
+      - key: CBU_API_URL
+        value: https://cbu.uz/uz/arkhiv-kursov-valyut/json/
+      - key: SCRAPE_INTERVAL
+        value: 0 9 * * *
+      # Admin panelga kirish — DEPLOYDAN KEYIN PAROLNI O'ZGARTIRING!
+      - key: ADMIN_EMAIL
+        value: admin@currency.uz
+      - key: ADMIN_PASSWORD
+        value: Admin@12345
+      # Telegram bot tokeni — Render dashboard'da qo'lda kiriting (sync: false)
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
