@@ -13,6 +13,7 @@ import prisma from './config/database';
 import routes from './routes/index';
 import { startScheduler } from './services/scheduler.service';
 import { startBot, stopBot } from './services/telegram.service';
+import { startKeepAlive, stopKeepAlive } from './services/keepalive.service';
 import { ratesService } from './services/rates.service';
 import { globalErrorHandler, notFoundHandler } from './middleware/error-handler';
 
@@ -92,12 +93,14 @@ async function bootstrap() {
 
     startScheduler();
     await startBot();
+    startKeepAlive();
 
     // ── Graceful Shutdown ──────────────────────────────
     const shutdown = async (signal: string) => {
       logger.info(`${signal} received, shutting down gracefully...`);
 
       server.close(async () => {
+        stopKeepAlive();
         await stopBot();
         await prisma.$disconnect();
         logger.info('👋 Server shut down gracefully');

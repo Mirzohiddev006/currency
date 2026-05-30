@@ -20,6 +20,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('7d'),
   TELEGRAM_BOT_TOKEN: z.string().optional(),
   TELEGRAM_WEBHOOK_URL: z.string().optional(),
+  KEEPALIVE_URL: z.string().optional(),
   CLIENT_URL: z.string().default('http://localhost:3000'),
   CBU_API_URL: z.string().default('https://cbu.uz/uz/arkhiv-kursov-valyut/json/'),
   SCRAPE_INTERVAL: z.string().default('0 9 * * *'), // Every day at 9 AM
