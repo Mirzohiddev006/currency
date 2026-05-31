@@ -50,9 +50,13 @@ export function startScheduler(): void {
     } finally {
       isRunning = false;
     }
+  }, {
+    // Cron hours are interpreted in Uzbekistan local time, not the
+    // server's UTC. So "0 9,16 * * *" means 09:00 and 16:00 in Tashkent.
+    timezone: 'Asia/Tashkent',
   });
 
-  logger.info(`✅ Scheduler started. Cron: "${cronExpression}"`);
+  logger.info(`✅ Scheduler started. Cron: "${cronExpression}" (Asia/Tashkent)`);
 }
 
 export function getSchedulerStatus(): SchedulerStatus {
