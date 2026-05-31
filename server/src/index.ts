@@ -102,13 +102,17 @@ async function bootstrap() {
     startKeepAlive();
 
     // ── Initial data load ──────────────────────────────
-    // The scheduler only scrapes on its cron (daily 9 AM). On a
-    // fresh deploy the rates table is empty until then, so do one
-    // background scrape on boot if there's no data yet.
+    // The scheduler only scrapes on its cron (09:00 & 16:00). On a
+    // fresh deploy the bank rates may be missing until then, so do one
+    // background scrape on boot if there are no bank rates yet.
+    // NB: CBU rows are stored with only cbRate set (buy/sell = null),
+    // so we count rows that actually carry a buy/sell rate.
     try {
-      const existingRates = await prisma.exchangeRate.count();
-      if (existingRates === 0) {
-        logger.info('📥 No rates in DB — running initial scrape...');
+      const existingBankRates = await prisma.exchangeRate.count({
+        where: { OR: [{ buyRate: { not: null } }, { sellRate: { not: null } }] },
+      });
+      if (existingBankRates === 0) {
+        logger.info('📥 No bank rates in DB — running initial scrape...');
         void ratesService
           .refreshAllRates()
           .then((r) =>
