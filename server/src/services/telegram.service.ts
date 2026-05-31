@@ -490,24 +490,36 @@ export async function notifyUsersAboutRates(): Promise<void> {
   const botInstance = getBot();
   const users = await userRepository.getActiveUsers();
 
-  let overview;
+  let board: BankBoard;
   try {
-    overview = await ratesService.getRatesOverview();
+    board = await ratesService.getBankBoard('USD');
   } catch (error) {
-    logger.error('Failed to build overview for notifications:', error);
+    logger.error('Failed to build USD board for notifications:', error);
     return;
   }
 
+  // Markaziy bank USD kursi
+  const cbRate = board.banks.find((b) => b.cbRate !== null)?.cbRate ?? null;
+
+  // Eng yirik 5 ta hisobot bergan bank (kursi mavjudlari)
+  const topBanks = board.banks.filter((b) => b.hasRate).slice(0, 5);
+
+  const bankLines = topBanks.length
+    ? topBanks
+        .map(
+          (b, i) =>
+            `${i + 1}. <b>${b.bank.nameUz}</b>\n` +
+            `   Xarid ${formatRate(b.buyRate)} | Sotish ${formatRate(b.sellRate)} so'm`
+        )
+        .join('\n')
+    : 'Banklardan hozircha kurs ma\'lumoti yo\'q.';
+
   const text =
-    `<b>Bugungi valyuta kurslari</b>\n` +
-    `${overview.currencies[0]?.date || ''}\n\n` +
-    overview.currencies
-      .slice(0, 5)
-      .map(
-        (currency) =>
-          `${trendIcon(currency.trend)} <b>${currency.code}</b> ${formatRate(currency.cbRate)} so'm (${formatDiff(currency)})`
-      )
-      .join('\n');
+    `\u{1F4B5} <b>Dollar (USD) kursi yangilandi!</b>\n` +
+    `${board.date || ''}\n\n` +
+    `\u{1F3E6} <b>Markaziy bank:</b> ${formatRate(cbRate)} so'm\n\n` +
+    `\u{1F4CA} <b>Eng yirik 5 bank:</b>\n` +
+    bankLines;
 
   let successCount = 0;
 
