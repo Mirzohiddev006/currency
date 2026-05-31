@@ -514,10 +514,26 @@ export async function notifyUsersAboutRates(): Promise<void> {
         .join('\n')
     : 'Banklardan hozircha kurs ma\'lumoti yo\'q.';
 
+  // Bugungi sana (Toshkent vaqti) — DD.MM.YYYY
+  const todayStr = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Tashkent',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
+    .format(new Date())
+    .replace(/\//g, '.');
+
+  // CBU har kuni yangi kurs e'lon qilmaydi. board.date — kursning rasmiy
+  // sanasi; agar bugungidan farq qilsa, qavs ichida ko'rsatamiz.
+  const isCbDate = /^\d{2}\.\d{2}\.\d{4}$/.test(board.date || '');
+  const cbDateNote =
+    isCbDate && board.date !== todayStr ? ` (${board.date} dagi rasmiy kurs)` : '';
+
   const text =
-    `\u{1F4B5} <b>Dollar (USD) kursi yangilandi!</b>\n` +
-    `${board.date || ''}\n\n` +
-    `\u{1F3E6} <b>Markaziy bank:</b> ${formatRate(cbRate)} so'm\n\n` +
+    `\u{1F4B5} <b>Dollar (USD) kursi</b>\n` +
+    `\u{1F4C5} ${todayStr}\n\n` +
+    `\u{1F3E6} <b>Markaziy bank:</b> ${formatRate(cbRate)} so'm${cbDateNote}\n\n` +
     `\u{1F4CA} <b>Eng yirik 5 bank:</b>\n` +
     bankLines;
 
