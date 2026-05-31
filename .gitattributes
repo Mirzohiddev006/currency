@@ -1,0 +1,5 @@
+# Shell scripts must always use LF line endings, even on Windows checkouts.
+# CRLF in docker-entrypoint.sh breaks `set -e` inside the Linux container
+# ("set: illegal option -"), which crashes the Render deploy at startup.
+*.sh text eol=lf
+docker-entrypoint.sh text eol=lf
