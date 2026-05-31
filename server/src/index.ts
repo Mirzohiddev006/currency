@@ -19,6 +19,12 @@ import { globalErrorHandler, notFoundHandler } from './middleware/error-handler'
 
 const app = express();
 
+// ── Trust proxy ──────────────────────────────────────────
+// Render (and most PaaS) sit behind a reverse proxy that sets
+// X-Forwarded-For. Without this, express-rate-limit throws
+// ERR_ERL_UNEXPECTED_X_FORWARDED_FOR and client IPs are wrong.
+app.set('trust proxy', 1);
+
 // ── Security Middlewares ─────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: env.NODE_ENV === 'production' ? undefined : false,
@@ -94,6 +100,27 @@ async function bootstrap() {
     startScheduler();
     await startBot();
     startKeepAlive();
+
+    // ── Initial data load ──────────────────────────────
+    // The scheduler only scrapes on its cron (daily 9 AM). On a
+    // fresh deploy the rates table is empty until then, so do one
+    // background scrape on boot if there's no data yet.
+    try {
+      const existingRates = await prisma.exchangeRate.count();
+      if (existingRates === 0) {
+        logger.info('📥 No rates in DB — running initial scrape...');
+        void ratesService
+          .refreshAllRates()
+          .then((r) =>
+            logger.info(
+              `🔄 Initial load done. CBU: ${r.cbuRates} rates, banks: ${r.bankResults.length}`
+            )
+          )
+          .catch((e) => logger.error('❌ Initial load failed:', e));
+      }
+    } catch (e) {
+      logger.error('❌ Initial rates check failed:', e);
+    }
 
     // ── Graceful Shutdown ──────────────────────────────
     const shutdown = async (signal: string) => {
