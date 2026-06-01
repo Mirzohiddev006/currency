@@ -34,9 +34,12 @@ app.use(helmet({
 const allowedOrigins = env.CLIENT_URL.split(',').map((o) => o.trim()).filter(Boolean);
 app.use(cors({
   origin(origin, callback) {
-    // Allow non-browser clients (no Origin header) and any whitelisted origin.
-    // CLIENT_URL may be a comma-separated list (Render + Vercel admin + webapp).
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    // Allow non-browser clients (no Origin header), wildcard "*", and any
+    // whitelisted origin. CLIENT_URL may be a comma-separated list
+    // (Render + Vercel admin + webapp) or "*" to allow everything.
+    if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
     return callback(new Error('Not allowed by CORS: ' + origin));
   },
   credentials: true,

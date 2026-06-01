@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { login, getMe } from '../controllers/auth.controller';
 import {
+  broadcast,
   getAnalytics,
   getBanks,
   getScrapeLogs,
@@ -25,6 +26,7 @@ import {
   analyticsQuerySchema,
   bankCodeParamsSchema,
   bankIdSchema,
+  broadcastSchema,
   currencyCodeSchema,
   loginSchema,
   paginationSchema,
@@ -58,6 +60,7 @@ router.get('/admin/banks', authMiddleware, asyncHandler(getBanks));
 router.patch('/admin/banks/:id/toggle', authMiddleware, validate(bankIdSchema, 'params'), asyncHandler(toggleBank));
 router.get('/admin/logs', authMiddleware, validate(scrapeLogsQuerySchema, 'query'), asyncHandler(getScrapeLogs));
 router.get('/admin/analytics', authMiddleware, validate(analyticsQuerySchema, 'query'), asyncHandler(getAnalytics));
+router.post('/admin/broadcast', authMiddleware, validate(broadcastSchema), asyncHandler(broadcast));
 
 router.post('/bot/webhook', (req, res) => {
   if (!isTelegramBotConfigured()) {

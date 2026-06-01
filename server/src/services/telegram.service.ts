@@ -23,6 +23,7 @@ function flag(code: string): string {
 }
 
 const VIEW_RATES_BUTTON = "📊 Kursni ko'rish";
+const CONTACT_BUTTON = "📱 Telefon raqamni ulashish";
 const BANK_BOARD_CURRENCY = 'USD';
 const BANK_PAGE_SIZE = 8;
 const NOTIFY_DELAY_MS = 50;
@@ -308,13 +309,75 @@ export async function stopBot(): Promise<void> {
   logger.info('Telegram bot stopped');
 }
 
+function contactRequestKeyboard() {
+  return Markup.keyboard([
+    [Markup.button.contactRequest(CONTACT_BUTTON)],
+  ])
+    .resize()
+    .oneTime();
+}
+
+async function promptForContact(ctx: Context, name: string): Promise<void> {
+  await ctx.reply(
+    `Salom, ${name}! 👋\n\n` +
+      `💱 <b>Valyuta Tracker</b>\n\n` +
+      `Davom etish uchun pastdagi «${CONTACT_BUTTON}» tugmasini bosib telefon raqamingizni ulashing. ` +
+      `Raqamingiz faqat sizga kurslar haqida xabar yuborish uchun ishlatiladi.`,
+    {
+      parse_mode: 'HTML',
+      ...contactRequestKeyboard(),
+    }
+  );
+}
+
+async function userHasPhone(ctx: Context): Promise<boolean> {
+  if (!ctx.from) return false;
+  try {
+    const user = await userRepository.findByTelegramId(BigInt(ctx.from.id));
+    return Boolean(user?.phone);
+  } catch {
+    return false;
+  }
+}
+
 function registerHandlers(botInstance: Telegraf): void {
+  // ── Telefon raqami darvozasi ─────────────────────────────
+  // /start va kontakt ulashishdan tashqari barcha interaktsiyalar
+  // telefon raqami ulashilgan bo'lishini talab qiladi.
+  botInstance.use(async (ctx, next) => {
+    const msg = ctx.message;
+    const isStart =
+      !!msg && 'text' in msg && typeof msg.text === 'string' && msg.text.startsWith('/start');
+    const isContact = !!msg && 'contact' in msg;
+
+    if (isStart || isContact || !ctx.from) {
+      return next();
+    }
+
+    if (!(await userHasPhone(ctx))) {
+      await safeAnswerCbQuery(ctx);
+      await promptForContact(ctx, ctx.from.first_name || 'Foydalanuvchi');
+      return;
+    }
+
+    return next();
+  });
+
   botInstance.start(async (ctx) => {
     const isNewUser = ctx.from
       ? !(await userRepository.findByTelegramId(BigInt(ctx.from.id)))
       : false;
     await trackUser(ctx, '/start');
     const name = ctx.from?.first_name || 'Foydalanuvchi';
+
+    // Telefon raqami hali yo'q bo'lsa — avval uni so'raymiz.
+    if (!(await userHasPhone(ctx))) {
+      await promptForContact(ctx, name);
+      if (isNewUser) {
+        void maybeRefreshForNewUser();
+      }
+      return;
+    }
 
     await ctx.reply(
       `Salom, ${name}! 👋\n\n` +
@@ -331,6 +394,36 @@ function registerHandlers(botInstance: Telegraf): void {
     if (isNewUser) {
       void maybeRefreshForNewUser();
     }
+  });
+
+  // ── Kontakt (telefon raqami) ulashildi ───────────────────
+  botInstance.on('contact', async (ctx) => {
+    const contact = ctx.message?.contact;
+    if (!ctx.from || !contact) return;
+
+    // Foydalanuvchi faqat o'z raqamini ulashishi mumkin.
+    if (contact.user_id && contact.user_id !== ctx.from.id) {
+      await ctx.reply(
+        `Iltimos, o'zingizning raqamingizni ulashing — pastdagi «${CONTACT_BUTTON}» tugmasi orqali.`,
+        contactRequestKeyboard()
+      );
+      return;
+    }
+
+    await trackUser(ctx, 'share_contact');
+    try {
+      await userRepository.setPhone(BigInt(ctx.from.id), contact.phone_number);
+    } catch (error) {
+      logger.error('setPhone error:', error);
+    }
+
+    const name = ctx.from.first_name || 'Foydalanuvchi';
+    await ctx.reply(
+      `Rahmat, ${name}! ✅ Telefon raqamingiz saqlandi.\n\n` +
+        `Endi «${VIEW_RATES_BUTTON}» tugmasi orqali kurslarni ko'rishingiz mumkin.`,
+      Markup.keyboard([[VIEW_RATES_BUTTON]]).resize()
+    );
+    await sendOverview(ctx);
   });
 
   botInstance.command('banks', async (ctx) => {
@@ -596,4 +689,58 @@ export async function notifyUsersAboutRates(): Promise<void> {
   }
 
   logger.info(`Telegram notifications sent: ${successCount}/${users.length}`);
+}
+
+
+export interface BroadcastResult {
+  total: number;
+  sent: number;
+  failed: number;
+}
+
+// Admin panel orqali barcha faol foydalanuvchilarga xabar yuborish.
+// Matn majburiy; rasm (imageUrl) ixtiyoriy — bo'lsa rasm + caption yuboriladi.
+export async function broadcastToUsers(
+  text: string,
+  imageUrl?: string
+): Promise<BroadcastResult> {
+  if (!isTelegramBotConfigured()) {
+    throw new Error('Telegram bot is not configured');
+  }
+
+  const botInstance = getBot();
+  const users = await userRepository.getActiveUsers();
+
+  let sent = 0;
+  let failed = 0;
+  const caption = text?.trim() || undefined;
+
+  for (const user of users) {
+    const chatId = Number(user.telegramId);
+    try {
+      if (imageUrl) {
+        await botInstance.telegram.sendPhoto(chatId, imageUrl, {
+          caption,
+          parse_mode: 'HTML',
+        });
+      } else {
+        await botInstance.telegram.sendMessage(chatId, caption || '', {
+          parse_mode: 'HTML',
+        });
+      }
+      sent++;
+      await new Promise((resolve) => setTimeout(resolve, NOTIFY_DELAY_MS));
+    } catch (error) {
+      failed++;
+      // Bloklagan / o'chirgan foydalanuvchilarni faolsizlantiramiz
+      try {
+        await userRepository.deactivateUser(user.id);
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  logger.info(`📣 Broadcast done: ${sent} sent, ${failed} failed / ${users.length} total`);
+  return { total: users.length, sent, failed };
 }

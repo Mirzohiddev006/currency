@@ -6,6 +6,7 @@ import { useAuthStore } from './hooks/useAuth';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const RatesPage = lazy(() => import('./pages/Rates'));
 const UsersPage = lazy(() => import('./pages/Users'));
+const BroadcastPage = lazy(() => import('./pages/Broadcast'));
 const BanksPage = lazy(() => import('./pages/Banks'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Logs = lazy(() => import('./pages/Logs'));
@@ -32,6 +33,7 @@ function ProtectedLayout() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/rates" element={<RatesPage />} />
             <Route path="/users" element={<UsersPage />} />
+            <Route path="/broadcast" element={<BroadcastPage />} />
             <Route path="/banks" element={<BanksPage />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/logs" element={<Logs />} />

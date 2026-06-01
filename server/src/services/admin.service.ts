@@ -8,6 +8,7 @@ import { daysAgo, formatDateKey } from '../lib/date';
 import { CACHE_KEYS, CACHE_TTL, DashboardStats, AnalyticsData } from '../types';
 import { NotFoundError } from '../lib/errors';
 import { ratesService } from './rates.service';
+import { broadcastToUsers, BroadcastResult } from './telegram.service';
 
 export class AdminService {
   async getDashboardStats(): Promise<DashboardStats> {
@@ -113,6 +114,11 @@ export class AdminService {
 
   async getScrapeLogs(limit: number) {
     return ratesRepository.getScrapeLogs(limit);
+  }
+
+  async broadcast(text: string, imageUrl?: string): Promise<BroadcastResult> {
+    const cleanImage = imageUrl && imageUrl.trim().length > 0 ? imageUrl.trim() : undefined;
+    return broadcastToUsers(text, cleanImage);
   }
 }
 

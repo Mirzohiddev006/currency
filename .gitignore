@@ -52,3 +52,6 @@ Thumbs.db
 *.tgz
 *.7z
 *.rar
+
+# Cowork session metadata
+.claude/

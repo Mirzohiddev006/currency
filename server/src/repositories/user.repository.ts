@@ -51,11 +51,19 @@ export class UserRepository {
     username?: string;
     firstName?: string;
     lastName?: string;
+    phone?: string;
   }) {
     return prisma.telegramUser.upsert({
       where: { telegramId: data.telegramId },
       update: { lastActiveAt: new Date(), isActive: true },
       create: data,
+    });
+  }
+
+  async setPhone(telegramId: bigint, phone: string) {
+    return prisma.telegramUser.update({
+      where: { telegramId },
+      data: { phone, lastActiveAt: new Date(), isActive: true },
     });
   }
 

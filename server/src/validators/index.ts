@@ -49,3 +49,13 @@ export const bankIdSchema = z.object({
 export const bankCodeParamsSchema = z.object({
   bankCode: z.string().min(2).max(40).regex(/^[a-z0-9-]+$/i),
 });
+
+export const broadcastSchema = z
+  .object({
+    text: z.string().trim().max(4000).optional().default(''),
+    imageUrl: z.string().trim().url('Rasm URL manzili xato').optional().or(z.literal('')),
+  })
+  .refine(
+    (data) => (data.text && data.text.length > 0) || (data.imageUrl && data.imageUrl.length > 0),
+    { message: 'Matn yoki rasm URL manzilidan kamida bittasi kiritilishi shart' }
+  );

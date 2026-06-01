@@ -238,6 +238,52 @@ export const swaggerSpec = {
         responses: { 200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/ApiSuccess' } } } } },
       },
     },
+    '/admin/broadcast': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Broadcast a message to all active Telegram users',
+        description: 'Sends text and/or an image to every active subscriber. At least one of text or imageUrl is required.',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  text: { type: 'string', maxLength: 4000, example: 'Bugungi kurslar yangilandi!' },
+                  imageUrl: { type: 'string', format: 'uri', example: 'https://example.com/banner.jpg' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Broadcast result',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean' },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        total: { type: 'integer' },
+                        sent: { type: 'integer' },
+                        failed: { type: 'integer' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: { description: 'Validation error', content: { 'application/json': { schema: { $ref: '#/components/schemas/ApiError' } } } },
+        },
+      },
+    },
     '/bot/webhook': {
       post: {
         tags: ['Bot'],

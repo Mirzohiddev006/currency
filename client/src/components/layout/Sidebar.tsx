@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LogOut,
   ScrollText,
+  Send,
   TrendingUp,
   Users,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ const navItems = [
   { to: '/rates', icon: TrendingUp, label: 'Kurslar' },
   { to: '/banks', icon: Building2, label: 'Banklar' },
   { to: '/users', icon: Users, label: 'Foydalanuvchilar' },
+  { to: '/broadcast', icon: Send, label: 'Xabar yuborish' },
   { to: '/analytics', icon: BarChart2, label: 'Analitika' },
   { to: '/logs', icon: ScrollText, label: 'Loglar' },
 ];

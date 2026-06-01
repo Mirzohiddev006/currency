@@ -8,6 +8,7 @@ interface UserRow {
   username?: string;
   firstName?: string;
   lastName?: string;
+  phone?: string;
   isActive: boolean;
   subscribedAt: string;
   _count?: { requests: number };
@@ -52,7 +53,8 @@ export default function UsersPage() {
     const query = search.toLowerCase();
     return (
       user.username?.toLowerCase().includes(query) ||
-      user.firstName?.toLowerCase().includes(query)
+      user.firstName?.toLowerCase().includes(query) ||
+      user.phone?.toLowerCase().includes(query)
     );
   });
 
@@ -89,6 +91,7 @@ export default function UsersPage() {
                 <th className="pb-3 pr-4">#</th>
                 <th className="pb-3 pr-4">Foydalanuvchi</th>
                 <th className="pb-3 pr-4">Username</th>
+                <th className="pb-3 pr-4">Telefon</th>
                 <th className="pb-3 pr-4">Holat</th>
                 <th className="pb-3 pr-4">So'rovlar</th>
                 <th className="pb-3">Qo'shilgan</th>
@@ -97,7 +100,7 @@ export default function UsersPage() {
             <tbody className="divide-y divide-surface-800/50">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-500">
+                  <td colSpan={7} className="py-8 text-center text-slate-500">
                     <RefreshCw className="mx-auto h-5 w-5 animate-spin" />
                   </td>
                 </tr>
@@ -120,6 +123,11 @@ export default function UsersPage() {
                     <td className="py-3 pr-4">
                       <span className="font-mono text-xs text-slate-400">
                         {user.username ? `@${user.username}` : '-'}
+                      </span>
+                    </td>
+                    <td className="py-3 pr-4">
+                      <span className="font-mono text-xs text-slate-300">
+                        {user.phone || '-'}
                       </span>
                     </td>
                     <td className="py-3 pr-4">
