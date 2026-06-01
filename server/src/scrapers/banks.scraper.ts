@@ -9,6 +9,7 @@ import { BankRateResult, ScrapeResult } from "../types";
 const BANK_UZ_BASE_URL = "https://bank.uz";
 const KURS_UZ_SUPPORTED_CURRENCIES = ["USD", "RUB"];
 const KURS_UZ_CACHE_TTL_MS = 10 * 60 * 1000;
+const SCRAPE_CONCURRENCY = 5;
 const insecureHttpsAgent = new https.Agent({ rejectUnauthorized: false });
 const CURRENCY_NAME_CODE_MAP: Record<string, string> = {
   "aqsh dollari": "USD",
@@ -25,6 +26,36 @@ type ScrapedBankPayload = {
 
 let kursUzCache: { fetchedAt: number; rates: BankRateResult[] } | null = null;
 let kursUzPromise: Promise<BankRateResult[]> | null = null;
+
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  mapper: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+  const workerCount = Math.min(limit, items.length);
+
+  const workers = Array.from({ length: workerCount }, async () => {
+    while (true) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+
+      if (currentIndex >= items.length) {
+        break;
+      }
+
+      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
+    }
+  });
+
+  await Promise.all(workers);
+  return results;
+}
 
 function normalizeWhitespace(value: string | undefined): string {
   return (value || "").replace(/\s+/g, " ").trim();
@@ -487,8 +518,12 @@ export async function scrapeBank(bankCode: string): Promise<ScrapeResult> {
 }
 
 export async function scrapeAllBanks(): Promise<ScrapeResult[]> {
-  const results = await Promise.allSettled(
-    Object.entries(BANK_SCRAPERS).map(async ([bankCode, scraper]) => {
+  const entries = Object.entries(BANK_SCRAPERS);
+
+  return mapWithConcurrency(
+    entries,
+    SCRAPE_CONCURRENCY,
+    async ([bankCode, scraper]) => {
       const startedAt = Date.now();
 
       try {
@@ -512,19 +547,6 @@ export async function scrapeAllBanks(): Promise<ScrapeResult[]> {
           logoUrl: null,
         };
       }
-    }),
-  );
-
-  return results.map((result) =>
-    result.status === "fulfilled"
-      ? result.value
-      : {
-          bankCode: "unknown",
-          rates: [],
-          success: false,
-          duration: 0,
-          error: "Promise rejected",
-          logoUrl: null,
-        },
+    },
   );
 }

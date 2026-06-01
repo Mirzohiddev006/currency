@@ -79,7 +79,13 @@ export class AdminService {
   }
 
   async getUsers(page: number, limit: number) {
-    return userRepository.getPaginatedUsers(page, limit);
+    const { users, total } = await userRepository.getPaginatedUsers(page, limit);
+    const safeUsers = users.map((user) => ({
+      ...user,
+      telegramId: user.telegramId ? user.telegramId.toString() : null,
+    }));
+
+    return { users: safeUsers, total };
   }
 
   async getBanks() {
