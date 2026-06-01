@@ -61,6 +61,23 @@ export async function manualRefreshHandler(req: Request, res: Response) {
   );
 }
 
+export async function manualBankRefreshHandler(req: Request, res: Response) {
+  const { bankCode } = req.params;
+  const { isRunning } = getSchedulerStatus();
+  if (isRunning) {
+    throw new ConflictError('Yangilash jarayoni allaqachon davom etmoqda');
+  }
+
+  res.json({
+    success: true,
+    message: "Bank kurslarini yangilash boshlandi. Bu bir necha daqiqa olishi mumkin.",
+  });
+
+  ratesService.refreshBankRates(bankCode).catch((err) =>
+    console.error('Background bank refresh error:', err)
+  );
+}
+
 export async function getDashboardStatsHandler(req: Request, res: Response) {
   // Imported lazily to avoid circular dependency
   const { adminService } = await import('../services/admin.service');

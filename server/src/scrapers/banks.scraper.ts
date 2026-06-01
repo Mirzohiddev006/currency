@@ -406,6 +406,37 @@ export const BANK_SCRAPERS: Record<string, () => Promise<ScrapedBankPayload>> = 
   uzumbank: () => scrapeKursOnlyBank('uzumbank'),
 };
 
+export async function scrapeBank(bankCode: string): Promise<ScrapeResult> {
+  const scraper = BANK_SCRAPERS[bankCode];
+  if (!scraper) {
+    throw new Error(`Scraper not found for bank: ${bankCode}`);
+  }
+
+  const startedAt = Date.now();
+
+  try {
+    const { rates, logoUrl } = await scrapeBankWithRetry(bankCode, scraper);
+    return {
+      bankCode,
+      rates,
+      success: rates.length > 0,
+      duration: Date.now() - startedAt,
+      logoUrl,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    logger.error(`[Scraper] ${bankCode} failed after retries: ${message}`);
+    return {
+      bankCode,
+      rates: [],
+      success: false,
+      duration: Date.now() - startedAt,
+      error: message,
+      logoUrl: null,
+    };
+  }
+}
+
 export async function scrapeAllBanks(): Promise<ScrapeResult[]> {
   const results = await Promise.allSettled(
     Object.entries(BANK_SCRAPERS).map(async ([bankCode, scraper]) => {

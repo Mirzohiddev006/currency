@@ -2,8 +2,9 @@ import { Bank, ExchangeRate } from '@prisma/client';
 import { BANKS_SEED, PRIORITY_CURRENCIES } from '../config/banks';
 import { logger } from '../config/logger';
 import { cacheGetOrSet, cacheInvalidatePattern } from '../lib/cache';
+import { NotFoundError } from '../lib/errors';
 import { fetchCBURates } from '../scrapers/cbu.scraper';
-import { scrapeAllBanks } from '../scrapers/banks.scraper';
+import { scrapeAllBanks, scrapeBank } from '../scrapers/banks.scraper';
 import { ratesRepository } from '../repositories';
 import {
   BankCoverageSummary,
@@ -253,6 +254,71 @@ export class RatesService {
       totalDuration,
       errors,
     };
+  }
+
+  async refreshBankRates(bankCode: string): Promise<RefreshResult['bankResults'][number]> {
+    const bank = await ratesRepository.getBankByCode(bankCode);
+    if (!bank) {
+      throw new NotFoundError('Bank');
+    }
+
+    const result = await scrapeBank(bankCode);
+
+    if (!result.success || result.rates.length === 0) {
+      await ratesRepository.createScrapeLog({
+        bankCode,
+        status: 'FAILED',
+        message: result.error || 'No rates returned',
+        duration: result.duration,
+      });
+
+      return result;
+    }
+
+    try {
+      const now = new Date();
+
+      if (result.logoUrl && result.logoUrl !== bank.logoUrl) {
+        await ratesRepository.updateBankLogo(bank.id, result.logoUrl);
+      }
+
+      await ratesRepository.deleteTodaysRates(bank.id);
+      await ratesRepository.createManyRates(
+        result.rates.map((rate) => ({
+          bankId: bank.id,
+          currency: rate.currency,
+          code: rate.code,
+          buyRate: rate.buyRate,
+          sellRate: rate.sellRate,
+          date: now,
+        }))
+      );
+
+      await ratesRepository.createScrapeLog({
+        bankCode,
+        status: 'SUCCESS',
+        ratesCount: result.rates.length,
+        duration: result.duration,
+      });
+
+      await cacheInvalidatePattern('rates:');
+
+      return result;
+    } catch (error: any) {
+      await ratesRepository.createScrapeLog({
+        bankCode,
+        status: 'FAILED',
+        message: error.message,
+        duration: result.duration,
+      });
+
+      return {
+        ...result,
+        success: false,
+        rates: [],
+        error: error.message,
+      };
+    }
   }
 
   async getLatestRates(currency?: string): Promise<LatestRateGroup[]> {

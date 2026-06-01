@@ -177,6 +177,21 @@ export const swaggerSpec = {
         },
       },
     },
+    '/admin/banks/{bankCode}/refresh': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Trigger a manual scrape for a single bank',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          { name: 'bankCode', in: 'path', required: true, schema: { type: 'string', example: 'kapitalbank' } },
+        ],
+        responses: {
+          200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/ApiSuccess' } } } },
+          401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ApiError' } } } },
+          404: { description: 'Not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/ApiError' } } } },
+        },
+      },
+    },
     '/admin/stats': {
       get: {
         tags: ['Admin'],

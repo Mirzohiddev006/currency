@@ -17,6 +17,7 @@ import {
   getRateHistoryHandler,
   getRatesOverviewHandler,
   manualRefreshHandler,
+  manualBankRefreshHandler,
 } from '../controllers/rates.controller';
 import { asyncHandler } from '../lib/async-handler';
 import { authMiddleware } from '../middleware/auth';
@@ -54,6 +55,12 @@ router.get(
 );
 
 router.post('/admin/refresh', authMiddleware, asyncHandler(manualRefreshHandler));
+router.post(
+  '/admin/banks/:bankCode/refresh',
+  authMiddleware,
+  validate(bankCodeParamsSchema, 'params'),
+  asyncHandler(manualBankRefreshHandler)
+);
 router.get('/admin/stats', authMiddleware, asyncHandler(getDashboardStatsHandler));
 router.get('/admin/users', authMiddleware, validate(paginationSchema, 'query'), asyncHandler(getUsers));
 router.get('/admin/banks', authMiddleware, asyncHandler(getBanks));
