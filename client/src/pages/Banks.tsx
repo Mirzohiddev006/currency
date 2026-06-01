@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useMemo, useState } from 'react';
+import { startTransition, useEffect, useMemo, useState } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -9,18 +9,18 @@ import {
   Sparkles,
   WalletCards,
   Waves,
-} from 'lucide-react';
-import { api } from '../lib/api';
-import type { BankBoard, BankBoardRow, BankDetails } from '../types';
+} from "lucide-react";
+import { api } from "../lib/api";
+import type { BankBoard, BankBoardRow, BankDetails } from "../types";
 
-const DEFAULT_CURRENCY = 'USD';
+const DEFAULT_CURRENCY = "USD";
 
 function formatNumber(value: number | null, minimumFractionDigits = 0): string {
   if (value === null) {
-    return '-';
+    return "-";
   }
 
-  return value.toLocaleString('uz-UZ', {
+  return value.toLocaleString("uz-UZ", {
     minimumFractionDigits,
     maximumFractionDigits: 2,
   });
@@ -28,11 +28,11 @@ function formatNumber(value: number | null, minimumFractionDigits = 0): string {
 
 function bankInitials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .filter(Boolean)
     .slice(0, 2)
-    .map((chunk) => chunk[0]?.toUpperCase() || '')
-    .join('');
+    .map((chunk) => chunk[0]?.toUpperCase() || "")
+    .join("");
 }
 
 function BankLogo({
@@ -61,12 +61,16 @@ function BankLogo({
         <img
           src={src}
           alt={name}
-          className={imageClassName || 'h-full w-full object-contain'}
+          className={imageClassName || "h-full w-full object-contain"}
           onError={() => setImageFailed(true)}
         />
       ) : (
-        <span className={textClassName || 'font-display text-lg font-semibold text-slate-100'}>
-          {initials || 'BK'}
+        <span
+          className={
+            textClassName || "font-display text-lg font-semibold text-slate-100"
+          }
+        >
+          {initials || "BK"}
         </span>
       )}
     </div>
@@ -76,12 +80,12 @@ function BankLogo({
 export default function BanksPage() {
   const [board, setBoard] = useState<BankBoard | null>(null);
   const [details, setDetails] = useState<BankDetails | null>(null);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedBankCode, setSelectedBankCode] = useState<string | null>(null);
   const [loadingBoard, setLoadingBoard] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(true);
   const [refreshingBank, setRefreshingBank] = useState(false);
-  const [refreshMsg, setRefreshMsg] = useState('');
+  const [refreshMsg, setRefreshMsg] = useState("");
 
   useEffect(() => {
     void loadBoard();
@@ -99,22 +103,32 @@ export default function BanksPage() {
     setLoadingBoard(true);
 
     try {
-      const { data } = await api.get('/banks', {
+      const { data } = await api.get("/banks", {
         params: { currency: DEFAULT_CURRENCY },
       });
 
       const nextBoard: BankBoard = data.data;
       setBoard(nextBoard);
       setSelectedBankCode((current) => {
-        if (preferredCode && nextBoard.banks.some((bank) => bank.bank.code === preferredCode)) {
+        if (
+          preferredCode &&
+          nextBoard.banks.some((bank) => bank.bank.code === preferredCode)
+        ) {
           return preferredCode;
         }
 
-        if (current && nextBoard.banks.some((bank) => bank.bank.code === current)) {
+        if (
+          current &&
+          nextBoard.banks.some((bank) => bank.bank.code === current)
+        ) {
           return current;
         }
 
-        return nextBoard.banks.find((bank) => bank.hasRate)?.bank.code || nextBoard.banks[0]?.bank.code || null;
+        return (
+          nextBoard.banks.find((bank) => bank.hasRate)?.bank.code ||
+          nextBoard.banks[0]?.bank.code ||
+          null
+        );
       });
     } catch {
       setBoard(null);
@@ -149,17 +163,19 @@ export default function BanksPage() {
     }
 
     setRefreshingBank(true);
-    setRefreshMsg('');
+    setRefreshMsg("");
 
     try {
-      const { data } = await api.post(`/admin/banks/${selectedBankCode}/refresh`);
-      setRefreshMsg(data.message || 'Yangilash boshlandi.');
+      const { data } = await api.post(
+        `/admin/banks/${selectedBankCode}/refresh`,
+      );
+      setRefreshMsg(data.message || "Yangilash boshlandi.");
       setTimeout(() => {
         void loadBoard(selectedBankCode);
         void loadDetails(selectedBankCode);
       }, 5000);
     } catch (err: any) {
-      setRefreshMsg(err.response?.data?.message || 'Xatolik yuz berdi');
+      setRefreshMsg(err.response?.data?.message || "Xatolik yuz berdi");
     } finally {
       setRefreshingBank(false);
     }
@@ -172,13 +188,16 @@ export default function BanksPage() {
     }
 
     return (board?.banks || []).filter((item) => {
-      const haystack = `${item.bank.name} ${item.bank.nameUz} ${item.bank.code}`.toLowerCase();
+      const haystack =
+        `${item.bank.name} ${item.bank.nameUz} ${item.bank.code}`.toLowerCase();
       return haystack.includes(needle);
     });
   }, [board?.banks, search]);
 
   const selectedBoardRow =
-    board?.banks.find((item) => item.bank.code === selectedBankCode) || filteredBanks[0] || null;
+    board?.banks.find((item) => item.bank.code === selectedBankCode) ||
+    filteredBanks[0] ||
+    null;
 
   return (
     <div className="animate-slide-up space-y-6 p-6">
@@ -194,36 +213,44 @@ export default function BanksPage() {
                 O'zbekistondagi 30 ta bankning bugungi dollar kursi
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 md:text-base">
-                Sahifa ochilishi bilan kamida 30 ta bankning bugungi USD kursi ko'rinadi. Istalgan
-                bankni bossangiz, rasmi va o'sha bankdagi mavjud valyutalarning joriy holati darhol
-                yon panelda chiqadi.
+                Sahifa ochilishi bilan kamida 30 ta bankning bugungi USD kursi
+                ko'rinadi. Istalgan bankni bossangiz, rasmi va o'sha bankdagi
+                mavjud valyutalarning joriy holati darhol yon panelda chiqadi.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 md:min-w-[360px]">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Banklar</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Banklar
+              </p>
               <p className="mt-3 font-display text-3xl font-bold text-slate-50">
                 {board?.totalBanks || 0}
               </p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Kurs berganlar</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Kurs berganlar
+              </p>
               <p className="mt-3 font-display text-3xl font-bold text-slate-50">
                 {board?.reportingBanks || 0}/{board?.totalBanks || 0}
               </p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Standart valyuta</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Standart valyuta
+              </p>
               <p className="mt-3 font-display text-3xl font-bold text-slate-50">
                 {board?.currency || DEFAULT_CURRENCY}
               </p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Tanlangan bank</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Tanlangan bank
+              </p>
               <p className="mt-3 text-sm font-medium leading-5 text-slate-100">
-                {selectedBoardRow?.bank.nameUz || 'Bank tanlanmagan'}
+                {selectedBoardRow?.bank.nameUz || "Bank tanlanmagan"}
               </p>
             </div>
           </div>
@@ -258,8 +285,13 @@ export default function BanksPage() {
                 />
               </div>
 
-              <button onClick={() => void loadBoard(selectedBankCode || undefined)} className="btn-secondary">
-                <RefreshCw className={`h-4 w-4 ${loadingBoard ? 'animate-spin' : ''}`} />
+              <button
+                onClick={() => void loadBoard(selectedBankCode || undefined)}
+                className="btn-secondary"
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${loadingBoard ? "animate-spin" : ""}`}
+                />
                 Yangilash
               </button>
             </div>
@@ -267,7 +299,9 @@ export default function BanksPage() {
 
           <div className="mt-5 flex items-center justify-between rounded-3xl border border-surface-800 bg-surface-950/45 px-4 py-3 text-xs text-slate-400">
             <span>
-              {board?.date ? `${board.date} holatiga ko'ra` : "Bugungi ma'lumot yangilanmoqda"}
+              {board?.date
+                ? `${board.date} holatiga ko'ra`
+                : "Bugungi ma'lumot yangilanmoqda"}
             </span>
             <span>{filteredBanks.length} ta bank ko'rinyapti</span>
           </div>
@@ -287,8 +321,8 @@ export default function BanksPage() {
                     onClick={() => handleSelectBank(item.bank.code)}
                     className={`w-full rounded-[28px] border p-4 text-left transition-all ${
                       isSelected
-                        ? 'border-sky-400/30 bg-[linear-gradient(135deg,_rgba(14,165,233,0.16),_rgba(245,158,11,0.10))] shadow-[0_24px_80px_-52px_rgba(56,189,248,0.45)]'
-                        : 'border-surface-800 bg-surface-900/85 hover:border-surface-700 hover:bg-surface-900'
+                        ? "border-sky-400/30 bg-[linear-gradient(135deg,_rgba(14,165,233,0.16),_rgba(245,158,11,0.10))] shadow-[0_24px_80px_-52px_rgba(56,189,248,0.45)]"
+                        : "border-surface-800 bg-surface-900/85 hover:border-surface-700 hover:bg-surface-900"
                     }`}
                   >
                     <div className="flex items-start gap-4">
@@ -297,8 +331,8 @@ export default function BanksPage() {
                         name={item.bank.nameUz}
                         className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-3xl border ${
                           isSelected
-                            ? 'border-white/20 bg-white/10'
-                            : 'border-surface-700 bg-surface-950/60'
+                            ? "border-white/20 bg-white/10"
+                            : "border-surface-700 bg-surface-950/60"
                         }`}
                         imageClassName="h-10 w-10 object-contain"
                         textClassName="font-display text-lg font-semibold text-slate-100"
@@ -325,19 +359,25 @@ export default function BanksPage() {
 
                         <div className="mt-4 grid gap-3 sm:grid-cols-3">
                           <div className="rounded-2xl border border-surface-800 bg-surface-950/55 p-3">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Xarid</p>
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                              Xarid
+                            </p>
                             <p className="mt-2 font-mono text-xl font-semibold text-emerald-300">
                               {formatNumber(item.buyRate)}
                             </p>
                           </div>
                           <div className="rounded-2xl border border-surface-800 bg-surface-950/55 p-3">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Sotish</p>
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                              Sotish
+                            </p>
                             <p className="mt-2 font-mono text-xl font-semibold text-amber-300">
                               {formatNumber(item.sellRate)}
                             </p>
                           </div>
                           <div className="rounded-2xl border border-surface-800 bg-surface-950/55 p-3">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Valyuta soni</p>
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                              Valyuta soni
+                            </p>
                             <p className="mt-2 font-display text-xl font-semibold text-slate-50">
                               {item.availableCurrencies}
                             </p>
@@ -346,11 +386,16 @@ export default function BanksPage() {
 
                         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
                           <span>
-                            Spread: <span className="font-mono text-slate-300">{formatNumber(item.spread)}</span>
+                            Spread:{" "}
+                            <span className="font-mono text-slate-300">
+                              {formatNumber(item.spread)}
+                            </span>
                           </span>
                           <span>
                             {item.lastUpdated
-                              ? new Date(item.lastUpdated).toLocaleString('uz-UZ')
+                              ? new Date(item.lastUpdated).toLocaleString(
+                                  "uz-UZ",
+                                )
                               : "Bugungi kurs hali kelmagan"}
                           </span>
                         </div>
@@ -377,7 +422,9 @@ export default function BanksPage() {
                 Bank detail
               </div>
               <h2 className="mt-4 font-display text-2xl font-semibold text-slate-50">
-                {details?.bank.nameUz || selectedBoardRow?.bank.nameUz || 'Bank tanlang'}
+                {details?.bank.nameUz ||
+                  selectedBoardRow?.bank.nameUz ||
+                  "Bank tanlang"}
               </h2>
               <p className="mt-2 text-sm text-slate-400">
                 Bankning rasmi va hozir mavjud barcha valyutalari.
@@ -390,7 +437,9 @@ export default function BanksPage() {
                   disabled={!selectedBankCode || refreshingBank}
                   className="btn-secondary"
                 >
-                  <RefreshCw className={`h-4 w-4 ${refreshingBank ? 'animate-spin' : ''}`} />
+                  <RefreshCw
+                    className={`h-4 w-4 ${refreshingBank ? "animate-spin" : ""}`}
+                  />
                   {refreshingBank ? "Yangilanmoqda..." : "Bankni yangilash"}
                 </button>
                 {details?.bank.website && (
@@ -406,7 +455,9 @@ export default function BanksPage() {
                 )}
               </div>
               {refreshMsg && (
-                <p className="animate-fade-in text-xs text-emerald-400">{refreshMsg}</p>
+                <p className="animate-fade-in text-xs text-emerald-400">
+                  {refreshMsg}
+                </p>
               )}
             </div>
           </div>
@@ -415,7 +466,11 @@ export default function BanksPage() {
             <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
               <BankLogo
                 src={details?.bank.logoUrl || selectedBoardRow?.bank.logoUrl}
-                name={details?.bank.nameUz || selectedBoardRow?.bank.nameUz || 'Bank'}
+                name={
+                  details?.bank.nameUz ||
+                  selectedBoardRow?.bank.nameUz ||
+                  "Bank"
+                }
                 className="flex h-28 w-28 items-center justify-center rounded-[32px] border border-white/10 bg-slate-950/55"
                 imageClassName="h-16 w-16 object-contain"
                 textClassName="font-display text-3xl font-bold text-slate-100"
@@ -423,21 +478,37 @@ export default function BanksPage() {
 
               <div className="grid flex-1 gap-3 sm:grid-cols-3">
                 <div className="rounded-3xl border border-white/10 bg-slate-950/40 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">USD xarid</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                    USD xarid
+                  </p>
                   <p className="mt-3 font-mono text-2xl font-semibold text-emerald-300">
-                    {formatNumber(details?.summary.usdBuyRate ?? selectedBoardRow?.buyRate ?? null)}
+                    {formatNumber(
+                      details?.summary.usdBuyRate ??
+                        selectedBoardRow?.buyRate ??
+                        null,
+                    )}
                   </p>
                 </div>
                 <div className="rounded-3xl border border-white/10 bg-slate-950/40 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">USD sotish</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                    USD sotish
+                  </p>
                   <p className="mt-3 font-mono text-2xl font-semibold text-amber-300">
-                    {formatNumber(details?.summary.usdSellRate ?? selectedBoardRow?.sellRate ?? null)}
+                    {formatNumber(
+                      details?.summary.usdSellRate ??
+                        selectedBoardRow?.sellRate ??
+                        null,
+                    )}
                   </p>
                 </div>
                 <div className="rounded-3xl border border-white/10 bg-slate-950/40 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Valyutalar</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                    Valyutalar
+                  </p>
                   <p className="mt-3 font-display text-2xl font-semibold text-slate-50">
-                    {details?.summary.currencyCount ?? selectedBoardRow?.availableCurrencies ?? 0}
+                    {details?.summary.currencyCount ??
+                      selectedBoardRow?.availableCurrencies ??
+                      0}
                   </p>
                 </div>
               </div>
@@ -446,13 +517,17 @@ export default function BanksPage() {
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-surface-800 bg-surface-950/45 px-4 py-3 text-xs text-slate-400">
               <span>
                 {details?.summary.lastUpdated
-                  ? `Yangilangan: ${new Date(details.summary.lastUpdated).toLocaleString('uz-UZ')}`
+                  ? `Yangilangan: ${new Date(details.summary.lastUpdated).toLocaleString("uz-UZ")}`
                   : "Yangilanish vaqti yo'q"}
               </span>
               <span>
-                USD spread:{' '}
+                USD spread:{" "}
                 <span className="font-mono text-slate-200">
-                  {formatNumber(details?.summary.usdSpread ?? selectedBoardRow?.spread ?? null)}
+                  {formatNumber(
+                    details?.summary.usdSpread ??
+                      selectedBoardRow?.spread ??
+                      null,
+                  )}
                 </span>
               </span>
             </div>
@@ -480,7 +555,9 @@ export default function BanksPage() {
                         <p className="font-mono text-sm font-bold tracking-[0.18em] text-slate-200">
                           {currency.code}
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-slate-400">{currency.currency}</p>
+                        <p className="mt-1 text-xs leading-5 text-slate-400">
+                          {currency.currency}
+                        </p>
                       </div>
                       <span className="rounded-full border border-surface-700 bg-surface-900 px-2.5 py-1 text-[11px] text-slate-400">
                         MB {formatNumber(currency.cbRate, 2)}
@@ -510,12 +587,17 @@ export default function BanksPage() {
 
                     <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
                       <span>
-                        Spread <span className="font-mono text-slate-300">{formatNumber(currency.spread)}</span>
+                        Spread{" "}
+                        <span className="font-mono text-slate-300">
+                          {formatNumber(currency.spread)}
+                        </span>
                       </span>
                       <span>
                         {currency.lastUpdated
-                          ? new Date(currency.lastUpdated).toLocaleDateString('uz-UZ')
-                          : '-'}
+                          ? new Date(currency.lastUpdated).toLocaleDateString(
+                              "uz-UZ",
+                            )
+                          : "-"}
                       </span>
                     </div>
                   </article>
@@ -528,7 +610,8 @@ export default function BanksPage() {
                 <Building2 className="h-6 w-6" />
               </div>
               <p className="mt-4 text-sm text-slate-400">
-                Bank detaili yuklanmadi. Boshqa bankni tanlab yoki qayta yangilab ko'ring.
+                Bank detaili yuklanmadi. Boshqa bankni tanlab yoki qayta
+                yangilab ko'ring.
               </p>
             </div>
           )}

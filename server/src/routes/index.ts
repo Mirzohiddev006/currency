@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { login, getMe } from '../controllers/auth.controller';
+import { Router } from "express";
+import { login, getMe } from "../controllers/auth.controller";
 import {
   broadcast,
   getAnalytics,
@@ -7,7 +7,7 @@ import {
   getScrapeLogs,
   getUsers,
   toggleBank,
-} from '../controllers/admin.controller';
+} from "../controllers/admin.controller";
 import {
   getBankBoardHandler,
   getBankDetailsHandler,
@@ -18,11 +18,11 @@ import {
   getRatesOverviewHandler,
   manualRefreshHandler,
   manualBankRefreshHandler,
-} from '../controllers/rates.controller';
-import { asyncHandler } from '../lib/async-handler';
-import { authMiddleware } from '../middleware/auth';
-import { validate } from '../middleware/validate';
-import { getBot, isTelegramBotConfigured } from '../services/telegram.service';
+} from "../controllers/rates.controller";
+import { asyncHandler } from "../lib/async-handler";
+import { authMiddleware } from "../middleware/auth";
+import { validate } from "../middleware/validate";
+import { getBot, isTelegramBotConfigured } from "../services/telegram.service";
 import {
   analyticsQuerySchema,
   bankCodeParamsSchema,
@@ -35,45 +35,94 @@ import {
   rateHistoryQuerySchema,
   ratesQuerySchema,
   scrapeLogsQuerySchema,
-} from '../validators';
+} from "../validators";
 
 const router = Router();
 
-router.post('/auth/login', validate(loginSchema), asyncHandler(login));
-router.get('/auth/me', authMiddleware, asyncHandler(getMe));
+router.post("/auth/login", validate(loginSchema), asyncHandler(login));
+router.get("/auth/me", authMiddleware, asyncHandler(getMe));
 
-router.get('/rates', validate(ratesQuerySchema, 'query'), asyncHandler(getLatestRatesHandler));
-router.get('/rates/overview', asyncHandler(getRatesOverviewHandler));
-router.get('/banks', validate(ratesQuerySchema, 'query'), asyncHandler(getBankBoardHandler));
-router.get('/banks/:bankCode', validate(bankCodeParamsSchema, 'params'), asyncHandler(getBankDetailsHandler));
-router.get('/rates/:code', validate(currencyCodeSchema, 'params'), asyncHandler(getCurrencyRatesHandler));
 router.get(
-  '/rates/history/:bankCode/:currency',
-  validate(rateHistoryParamsSchema, 'params'),
-  validate(rateHistoryQuerySchema, 'query'),
-  asyncHandler(getRateHistoryHandler)
+  "/rates",
+  validate(ratesQuerySchema, "query"),
+  asyncHandler(getLatestRatesHandler),
+);
+router.get("/rates/overview", asyncHandler(getRatesOverviewHandler));
+router.get(
+  "/banks",
+  validate(ratesQuerySchema, "query"),
+  asyncHandler(getBankBoardHandler),
+);
+router.get(
+  "/banks/:bankCode",
+  validate(bankCodeParamsSchema, "params"),
+  asyncHandler(getBankDetailsHandler),
+);
+router.get(
+  "/rates/:code",
+  validate(currencyCodeSchema, "params"),
+  asyncHandler(getCurrencyRatesHandler),
+);
+router.get(
+  "/rates/history/:bankCode/:currency",
+  validate(rateHistoryParamsSchema, "params"),
+  validate(rateHistoryQuerySchema, "query"),
+  asyncHandler(getRateHistoryHandler),
 );
 
-router.post('/admin/refresh', authMiddleware, asyncHandler(manualRefreshHandler));
 router.post(
-  '/admin/banks/:bankCode/refresh',
+  "/admin/refresh",
   authMiddleware,
-  validate(bankCodeParamsSchema, 'params'),
-  asyncHandler(manualBankRefreshHandler)
+  asyncHandler(manualRefreshHandler),
 );
-router.get('/admin/stats', authMiddleware, asyncHandler(getDashboardStatsHandler));
-router.get('/admin/users', authMiddleware, validate(paginationSchema, 'query'), asyncHandler(getUsers));
-router.get('/admin/banks', authMiddleware, asyncHandler(getBanks));
-router.patch('/admin/banks/:id/toggle', authMiddleware, validate(bankIdSchema, 'params'), asyncHandler(toggleBank));
-router.get('/admin/logs', authMiddleware, validate(scrapeLogsQuerySchema, 'query'), asyncHandler(getScrapeLogs));
-router.get('/admin/analytics', authMiddleware, validate(analyticsQuerySchema, 'query'), asyncHandler(getAnalytics));
-router.post('/admin/broadcast', authMiddleware, validate(broadcastSchema), asyncHandler(broadcast));
+router.post(
+  "/admin/banks/:bankCode/refresh",
+  authMiddleware,
+  validate(bankCodeParamsSchema, "params"),
+  asyncHandler(manualBankRefreshHandler),
+);
+router.get(
+  "/admin/stats",
+  authMiddleware,
+  asyncHandler(getDashboardStatsHandler),
+);
+router.get(
+  "/admin/users",
+  authMiddleware,
+  validate(paginationSchema, "query"),
+  asyncHandler(getUsers),
+);
+router.get("/admin/banks", authMiddleware, asyncHandler(getBanks));
+router.patch(
+  "/admin/banks/:id/toggle",
+  authMiddleware,
+  validate(bankIdSchema, "params"),
+  asyncHandler(toggleBank),
+);
+router.get(
+  "/admin/logs",
+  authMiddleware,
+  validate(scrapeLogsQuerySchema, "query"),
+  asyncHandler(getScrapeLogs),
+);
+router.get(
+  "/admin/analytics",
+  authMiddleware,
+  validate(analyticsQuerySchema, "query"),
+  asyncHandler(getAnalytics),
+);
+router.post(
+  "/admin/broadcast",
+  authMiddleware,
+  validate(broadcastSchema),
+  asyncHandler(broadcast),
+);
 
-router.post('/bot/webhook', (req, res) => {
+router.post("/bot/webhook", (req, res) => {
   if (!isTelegramBotConfigured()) {
     return res.status(503).json({
       success: false,
-      message: 'Telegram bot is disabled',
+      message: "Telegram bot is disabled",
     });
   }
 

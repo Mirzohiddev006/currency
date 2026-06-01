@@ -1,11 +1,11 @@
-import { Bank, ExchangeRate } from '@prisma/client';
-import { BANKS_SEED, PRIORITY_CURRENCIES } from '../config/banks';
-import { logger } from '../config/logger';
-import { cacheGetOrSet, cacheInvalidatePattern } from '../lib/cache';
-import { NotFoundError } from '../lib/errors';
-import { fetchCBURates } from '../scrapers/cbu.scraper';
-import { scrapeAllBanks, scrapeBank } from '../scrapers/banks.scraper';
-import { ratesRepository } from '../repositories';
+import { Bank, ExchangeRate } from "@prisma/client";
+import { BANKS_SEED, PRIORITY_CURRENCIES } from "../config/banks";
+import { logger } from "../config/logger";
+import { cacheGetOrSet, cacheInvalidatePattern } from "../lib/cache";
+import { NotFoundError } from "../lib/errors";
+import { fetchCBURates } from "../scrapers/cbu.scraper";
+import { scrapeAllBanks, scrapeBank } from "../scrapers/banks.scraper";
+import { ratesRepository } from "../repositories";
 import {
   BankCoverageSummary,
   BankBoard,
@@ -20,7 +20,7 @@ import {
   RatesOverview,
   RefreshResult,
   TrendDirection,
-} from '../types';
+} from "../types";
 
 type LatestRateGroup = {
   bank: {
@@ -45,7 +45,7 @@ function average(values: number[]): number | null {
 }
 
 function isNumber(value: number | null | undefined): value is number {
-  return typeof value === 'number' && !Number.isNaN(value);
+  return typeof value === "number" && !Number.isNaN(value);
 }
 
 function round(value: number): number {
@@ -83,12 +83,15 @@ function normalizeCbuRate(rate: CBURateResponse) {
 }
 
 function getTrend(diff: number): TrendDirection {
-  if (diff > 0) return 'up';
-  if (diff < 0) return 'down';
-  return 'flat';
+  if (diff > 0) return "up";
+  if (diff < 0) return "down";
+  return "flat";
 }
 
-function getSpread(buyRate: number | null, sellRate: number | null): number | null {
+function getSpread(
+  buyRate: number | null,
+  sellRate: number | null,
+): number | null {
   if (!isNumber(buyRate) || !isNumber(sellRate)) {
     return null;
   }
@@ -96,7 +99,10 @@ function getSpread(buyRate: number | null, sellRate: number | null): number | nu
   return round(sellRate - buyRate);
 }
 
-function getCoveragePercent(reportingBanks: number, totalBanks: number): number {
+function getCoveragePercent(
+  reportingBanks: number,
+  totalBanks: number,
+): number {
   if (totalBanks === 0) {
     return 0;
   }
@@ -136,7 +142,7 @@ export class RatesService {
       await ratesRepository.upsertBank(bank);
     }
 
-    logger.info('Banks seeded or verified');
+    logger.info("Banks seeded or verified");
   }
 
   async refreshAllRates(): Promise<RefreshResult> {
@@ -144,11 +150,11 @@ export class RatesService {
     const errors: string[] = [];
     let cbuRatesCount = 0;
 
-    logger.info('Starting full rates refresh');
+    logger.info("Starting full rates refresh");
 
     try {
       const cbuRates = await fetchCBURates();
-      const cbuBank = await ratesRepository.getBankByCode('cbu');
+      const cbuBank = await ratesRepository.getBankByCode("cbu");
 
       if (cbuBank) {
         const now = new Date();
@@ -158,16 +164,18 @@ export class RatesService {
             bankId: cbuBank.id,
             currency: rate.CcyNm_UZ || rate.CcyNm_EN,
             code: rate.Ccy,
-            cbRate: Number.parseFloat(rate.Rate) / (Number.parseInt(rate.Nominal, 10) || 1),
+            cbRate:
+              Number.parseFloat(rate.Rate) /
+              (Number.parseInt(rate.Nominal, 10) || 1),
             buyRate: null,
             sellRate: null,
             date: now,
-          }))
+          })),
         );
 
         await ratesRepository.createScrapeLog({
-          bankCode: 'cbu',
-          status: 'SUCCESS',
+          bankCode: "cbu",
+          status: "SUCCESS",
           ratesCount: cbuRates.length,
           duration: Date.now() - globalStart,
         });
@@ -178,11 +186,11 @@ export class RatesService {
     } catch (error: any) {
       errors.push(`CBU: ${error.message}`);
       await ratesRepository.createScrapeLog({
-        bankCode: 'cbu',
-        status: 'FAILED',
+        bankCode: "cbu",
+        status: "FAILED",
         message: error.message,
       });
-      logger.error('CBU fetch failed:', error);
+      logger.error("CBU fetch failed:", error);
     }
 
     const bankResults = await scrapeAllBanks();
@@ -200,8 +208,8 @@ export class RatesService {
       if (!success || rates.length === 0) {
         await ratesRepository.createScrapeLog({
           bankCode,
-          status: 'FAILED',
-          message: result.error || 'No rates returned',
+          status: "FAILED",
+          message: result.error || "No rates returned",
           duration,
         });
         processedResults.push({ ...result, rates: [], success: false });
@@ -224,12 +232,12 @@ export class RatesService {
             buyRate: rate.buyRate,
             sellRate: rate.sellRate,
             date: now,
-          }))
+          })),
         );
 
         await ratesRepository.createScrapeLog({
           bankCode,
-          status: 'SUCCESS',
+          status: "SUCCESS",
           ratesCount: rates.length,
           duration,
         });
@@ -242,7 +250,7 @@ export class RatesService {
       }
     }
 
-    await cacheInvalidatePattern('rates:');
+    await cacheInvalidatePattern("rates:");
 
     const totalDuration = Date.now() - globalStart;
     logger.info(`Rates refresh complete in ${totalDuration}ms`);
@@ -256,10 +264,12 @@ export class RatesService {
     };
   }
 
-  async refreshBankRates(bankCode: string): Promise<RefreshResult['bankResults'][number]> {
+  async refreshBankRates(
+    bankCode: string,
+  ): Promise<RefreshResult["bankResults"][number]> {
     const bank = await ratesRepository.getBankByCode(bankCode);
     if (!bank) {
-      throw new NotFoundError('Bank');
+      throw new NotFoundError("Bank");
     }
 
     const result = await scrapeBank(bankCode);
@@ -267,8 +277,8 @@ export class RatesService {
     if (!result.success || result.rates.length === 0) {
       await ratesRepository.createScrapeLog({
         bankCode,
-        status: 'FAILED',
-        message: result.error || 'No rates returned',
+        status: "FAILED",
+        message: result.error || "No rates returned",
         duration: result.duration,
       });
 
@@ -291,23 +301,23 @@ export class RatesService {
           buyRate: rate.buyRate,
           sellRate: rate.sellRate,
           date: now,
-        }))
+        })),
       );
 
       await ratesRepository.createScrapeLog({
         bankCode,
-        status: 'SUCCESS',
+        status: "SUCCESS",
         ratesCount: result.rates.length,
         duration: result.duration,
       });
 
-      await cacheInvalidatePattern('rates:');
+      await cacheInvalidatePattern("rates:");
 
       return result;
     } catch (error: any) {
       await ratesRepository.createScrapeLog({
         bankCode,
-        status: 'FAILED',
+        status: "FAILED",
         message: error.message,
         duration: result.duration,
       });
@@ -331,7 +341,10 @@ export class RatesService {
       const result: LatestRateGroup[] = [];
 
       for (const bank of banks) {
-        const rates = await ratesRepository.getLatestRatesForBank(bank.id, currency);
+        const rates = await ratesRepository.getLatestRatesForBank(
+          bank.id,
+          currency,
+        );
         if (rates.length > 0) {
           result.push({
             bank: {
@@ -354,67 +367,82 @@ export class RatesService {
   }
 
   async getRatesForCurrency(code: string) {
-    return cacheGetOrSet(
-      CACHE_KEYS.CURRENCY_RATES(code),
-      CACHE_TTL.RATES,
-      () => ratesRepository.getCurrencyRatesToday(code)
+    return cacheGetOrSet(CACHE_KEYS.CURRENCY_RATES(code), CACHE_TTL.RATES, () =>
+      ratesRepository.getCurrencyRatesToday(code),
     );
   }
 
   async getRatesOverview(): Promise<RatesOverview> {
-    return cacheGetOrSet(CACHE_KEYS.RATES_OVERVIEW, CACHE_TTL.RATES, async () => {
-      const [groups, cbuRates, activeBanks] = await Promise.all([
-        this.getLatestRates(),
-        this.getLatestCBUSnapshot(),
-        ratesRepository.getActiveBanks(),
-      ]);
+    return cacheGetOrSet(
+      CACHE_KEYS.RATES_OVERVIEW,
+      CACHE_TTL.RATES,
+      async () => {
+        const [groups, cbuRates, activeBanks] = await Promise.all([
+          this.getLatestRates(),
+          this.getLatestCBUSnapshot(),
+          ratesRepository.getActiveBanks(),
+        ]);
 
-      const commercialBanks = activeBanks.filter((bank) => !bank.isCentral);
-      const totalCommercialBanks = commercialBanks.length;
-      const totalCurrencies = cbuRates.length;
-      const groupsByBankCode = new Map(
-        groups.filter((group) => !group.bank.isCentral).map((group) => [group.bank.code, group])
-      );
-
-      const currencies = cbuRates.map((rate) => {
-        const offers = commercialBanks
-          .map((bank) => {
-            const group = groupsByBankCode.get(bank.code);
-            const bankRate = group?.rates.find((item) => item.code === rate.Ccy);
-            if (!bankRate) {
-              return null;
-            }
-
-            return {
-              buyRate: bankRate.buyRate,
-              sellRate: bankRate.sellRate,
-            };
-          })
-          .filter(Boolean) as Array<{ buyRate: number | null; sellRate: number | null }>;
-
-        return this.buildCurrencySummary(rate, offers, totalCommercialBanks);
-      });
-
-      const banks = commercialBanks
-        .map((bank) => this.buildBankCoverageSummary(bank, groupsByBankCode.get(bank.code), totalCurrencies))
-        .sort(
-          (left, right) =>
-            right.coveragePercent - left.coveragePercent ||
-            left.bank.nameUz.localeCompare(right.bank.nameUz)
+        const commercialBanks = activeBanks.filter((bank) => !bank.isCentral);
+        const totalCommercialBanks = commercialBanks.length;
+        const totalCurrencies = cbuRates.length;
+        const groupsByBankCode = new Map(
+          groups
+            .filter((group) => !group.bank.isCentral)
+            .map((group) => [group.bank.code, group]),
         );
 
-      return {
-        market: {
-          totalCurrencies,
-          totalBanks: activeBanks.length,
-          commercialBanks: totalCommercialBanks,
-          reportingBanks: banks.filter((bank) => bank.ratesCount > 0).length,
-          lastUpdated: getLatestTimestamp(groups),
-        },
-        currencies,
-        banks,
-      };
-    });
+        const currencies = cbuRates.map((rate) => {
+          const offers = commercialBanks
+            .map((bank) => {
+              const group = groupsByBankCode.get(bank.code);
+              const bankRate = group?.rates.find(
+                (item) => item.code === rate.Ccy,
+              );
+              if (!bankRate) {
+                return null;
+              }
+
+              return {
+                buyRate: bankRate.buyRate,
+                sellRate: bankRate.sellRate,
+              };
+            })
+            .filter(Boolean) as Array<{
+            buyRate: number | null;
+            sellRate: number | null;
+          }>;
+
+          return this.buildCurrencySummary(rate, offers, totalCommercialBanks);
+        });
+
+        const banks = commercialBanks
+          .map((bank) =>
+            this.buildBankCoverageSummary(
+              bank,
+              groupsByBankCode.get(bank.code),
+              totalCurrencies,
+            ),
+          )
+          .sort(
+            (left, right) =>
+              right.coveragePercent - left.coveragePercent ||
+              left.bank.nameUz.localeCompare(right.bank.nameUz),
+          );
+
+        return {
+          market: {
+            totalCurrencies,
+            totalBanks: activeBanks.length,
+            commercialBanks: totalCommercialBanks,
+            reportingBanks: banks.filter((bank) => bank.ratesCount > 0).length,
+            lastUpdated: getLatestTimestamp(groups),
+          },
+          currencies,
+          banks,
+        };
+      },
+    );
   }
 
   async getCurrencyDetails(code: string): Promise<CurrencyDetails> {
@@ -430,7 +458,8 @@ export class RatesService {
           this.getLatestCBUSnapshot(),
         ]);
 
-        const cbuRate = cbuRates.find((rate) => rate.Ccy === normalizedCode) || null;
+        const cbuRate =
+          cbuRates.find((rate) => rate.Ccy === normalizedCode) || null;
         const rowsByBankId = new Map(rows.map((row) => [row.bankId, row]));
         const commercialBanks = banks.filter((bank) => !bank.isCentral);
 
@@ -438,11 +467,13 @@ export class RatesService {
           .sort(
             (left, right) =>
               Number(right.isCentral) - Number(left.isCentral) ||
-              left.nameUz.localeCompare(right.nameUz)
+              left.nameUz.localeCompare(right.nameUz),
           )
           .map((bank) => {
             const row = rowsByBankId.get(bank.id);
-            const hasRate = bank.isCentral ? Boolean(cbuRate || row) : Boolean(row);
+            const hasRate = bank.isCentral
+              ? Boolean(cbuRate || row)
+              : Boolean(row);
 
             return {
               bank: {
@@ -455,17 +486,20 @@ export class RatesService {
               buyRate: row?.buyRate ?? null,
               sellRate: row?.sellRate ?? null,
               cbRate: bank.isCentral
-                ? row?.cbRate ?? (cbuRate ? normalizeCbuRate(cbuRate).cbRate : null)
+                ? (row?.cbRate ??
+                  (cbuRate ? normalizeCbuRate(cbuRate).cbRate : null))
                 : cbuRate
                   ? normalizeCbuRate(cbuRate).cbRate
-                  : row?.cbRate ?? null,
+                  : (row?.cbRate ?? null),
               spread: getSpread(row?.buyRate ?? null, row?.sellRate ?? null),
               hasRate,
               date: toIsoString(row?.date),
             };
           });
 
-        const reportingRows = detailRows.filter((row) => !row.bank.isCentral && row.hasRate);
+        const reportingRows = detailRows.filter(
+          (row) => !row.bank.isCentral && row.hasRate,
+        );
         const summary = cbuRate
           ? this.buildCurrencySummary(
               cbuRate,
@@ -473,7 +507,7 @@ export class RatesService {
                 buyRate: row.buyRate,
                 sellRate: row.sellRate,
               })),
-              commercialBanks.length
+              commercialBanks.length,
             )
           : null;
 
@@ -484,11 +518,11 @@ export class RatesService {
             .filter((row) => !row.bank.isCentral && !row.hasRate)
             .map((row) => row.bank.nameUz),
         };
-      }
+      },
     );
   }
 
-  async getBankBoard(currencyCode = 'USD'): Promise<BankBoard> {
+  async getBankBoard(currencyCode = "USD"): Promise<BankBoard> {
     const normalizedCode = currencyCode.toUpperCase();
 
     return cacheGetOrSet(
@@ -504,10 +538,14 @@ export class RatesService {
 
         const commercialBanks = banks.filter((bank) => !bank.isCentral);
         const rowsByBankId = new Map(
-          rows.filter((row) => !row.bank.isCentral).map((row) => [row.bankId, row])
+          rows
+            .filter((row) => !row.bank.isCentral)
+            .map((row) => [row.bankId, row]),
         );
         const groupsByBankCode = new Map(
-          groups.filter((group) => !group.bank.isCentral).map((group) => [group.bank.code, group])
+          groups
+            .filter((group) => !group.bank.isCentral)
+            .map((group) => [group.bank.code, group]),
         );
         const cbuRate = cbuRates.find((rate) => rate.Ccy === normalizedCode);
         const normalizedCbuRate = cbuRate ? normalizeCbuRate(cbuRate) : null;
@@ -541,7 +579,7 @@ export class RatesService {
             (left, right) =>
               Number(right.hasRate) - Number(left.hasRate) ||
               right.availableCurrencies - left.availableCurrencies ||
-              left.bank.nameUz.localeCompare(right.bank.nameUz)
+              left.bank.nameUz.localeCompare(right.bank.nameUz),
           );
 
         return {
@@ -549,10 +587,12 @@ export class RatesService {
           date: normalizedCbuRate?.date || getLatestTimestamp(groups),
           totalBanks: commercialBanks.length,
           reportingBanks: boardRows.filter((row) => row.hasRate).length,
-          missingBanks: boardRows.filter((row) => !row.hasRate).map((row) => row.bank.nameUz),
+          missingBanks: boardRows
+            .filter((row) => !row.hasRate)
+            .map((row) => row.bank.nameUz),
           banks: boardRows,
         };
-      }
+      },
     );
   }
 
@@ -573,12 +613,14 @@ export class RatesService {
           this.getLatestCBUSnapshot(),
         ]);
 
-        const cbuByCode = new Map(cbuRates.map((rate) => [rate.Ccy, normalizeCbuRate(rate)]));
+        const cbuByCode = new Map(
+          cbuRates.map((rate) => [rate.Ccy, normalizeCbuRate(rate)]),
+        );
         const currencies = [...rates]
           .sort(
             (left, right) =>
               compareCurrencyPriority(left.code, right.code) ||
-              left.currency.localeCompare(right.currency)
+              left.currency.localeCompare(right.currency),
           )
           .map((rate) => {
             const cbuRate = cbuByCode.get(rate.code);
@@ -594,9 +636,13 @@ export class RatesService {
             };
           });
 
-        const usdRate = currencies.find((rate) => rate.code === 'USD');
+        const usdRate = currencies.find((rate) => rate.code === "USD");
         const lastUpdated =
-          currencies.map((rate) => rate.lastUpdated).filter(Boolean).sort().reverse()[0] || null;
+          currencies
+            .map((rate) => rate.lastUpdated)
+            .filter(Boolean)
+            .sort()
+            .reverse()[0] || null;
 
         return {
           bank: {
@@ -618,7 +664,7 @@ export class RatesService {
           },
           currencies,
         };
-      }
+      },
     );
   }
 
@@ -629,18 +675,20 @@ export class RatesService {
     return cacheGetOrSet(
       CACHE_KEYS.RATE_HISTORY(bankCode, currencyCode, days),
       CACHE_TTL.HISTORY,
-      () => ratesRepository.getRateHistory(bank.id, currencyCode, days)
+      () => ratesRepository.getRateHistory(bank.id, currencyCode, days),
     );
   }
 
   private async getLatestCBUSnapshot(): Promise<CBURateResponse[]> {
-    return cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, () => fetchCBURates());
+    return cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, () =>
+      fetchCBURates(),
+    );
   }
 
   private buildCurrencySummary(
     cbuRate: CBURateResponse,
     rows: Array<{ buyRate: number | null; sellRate: number | null }>,
-    totalBanks: number
+    totalBanks: number,
   ): CurrencySummary {
     const normalized = normalizeCbuRate(cbuRate);
     const buyRates = rows.map((row) => row.buyRate).filter(isNumber);
@@ -664,7 +712,7 @@ export class RatesService {
   private buildBankCoverageSummary(
     bank: Bank,
     group: LatestRateGroup | undefined,
-    totalCurrencies: number
+    totalCurrencies: number,
   ): BankCoverageSummary {
     const rates = group?.rates || [];
     const ratesCount = rates.length;
@@ -688,7 +736,9 @@ export class RatesService {
       totalCurrencies,
       missingCurrencies: Math.max(totalCurrencies - ratesCount, 0),
       coveragePercent: getCoveragePercent(ratesCount, totalCurrencies),
-      supportedCurrencies: rates.map((rate) => rate.code).sort(compareCurrencyPriority),
+      supportedCurrencies: rates
+        .map((rate) => rate.code)
+        .sort(compareCurrencyPriority),
       lastUpdated: lastUpdated ? new Date(lastUpdated).toISOString() : null,
     };
   }
