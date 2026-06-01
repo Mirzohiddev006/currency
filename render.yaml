@@ -42,7 +42,7 @@ services:
         value: https://cbu.uz/uz/arkhiv-kursov-valyut/json/
       # Har kuni ertalab 9:00 va kechqurun 16:00 (Toshkent vaqti)
       - key: SCRAPE_INTERVAL
-        value: 0 9,16 * * *
+        value: 0 * * * *
       # Admin panelga kirish — DEPLOYDAN KEYIN PAROLNI O'ZGARTIRING!
       - key: ADMIN_EMAIL
         value: admin@currency.uz

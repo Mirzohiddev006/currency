@@ -12,9 +12,23 @@ import {
 import { ratesService } from './rates.service';
 
 const CURRENCIES = ['USD', 'EUR', 'RUB', 'GBP', 'CNY', 'JPY', 'KZT', 'TRY'];
+
+const FLAGS: Record<string, string> = {
+  USD: '🇺🇸', EUR: '🇪🇺', RUB: '🇷🇺', GBP: '🇬🇧',
+  CNY: '🇨🇳', JPY: '🇯🇵', KZT: '🇰🇿', TRY: '🇹🇷',
+};
+
+function flag(code: string): string {
+  return FLAGS[code] || '💱';
+}
+
+const VIEW_RATES_BUTTON = "📊 Kursni ko'rish";
 const BANK_BOARD_CURRENCY = 'USD';
 const BANK_PAGE_SIZE = 8;
 const NOTIFY_DELAY_MS = 50;
+
+let lastNewUserScrapeAt = 0;
+const NEW_USER_SCRAPE_THROTTLE_MS = 10 * 60 * 1000; // 10 daqiqa
 
 let bot: Telegraf | null = null;
 
@@ -47,7 +61,7 @@ function truncateLabel(value: string, limit = 24): string {
 function mainInlineKeyboard(selectedCurrency?: string) {
   const buttons = CURRENCIES.map((currency) =>
     Markup.button.callback(
-      selectedCurrency === currency ? `• ${currency}` : currency,
+      selectedCurrency === currency ? `• ${flag(currency)} ${currency}` : `${flag(currency)} ${currency}`,
       `currency:${currency}`
     )
   );
@@ -58,8 +72,8 @@ function mainInlineKeyboard(selectedCurrency?: string) {
       buttons.slice(3, 6),
       buttons.slice(6, 8),
       [
-        Markup.button.callback('Banklar', 'menu:banks'),
-        Markup.button.callback('Markaziy bank', 'menu:overview'),
+        Markup.button.callback('🏦 Banklar', 'menu:banks'),
+        Markup.button.callback('🏛 Markaziy bank', 'menu:overview'),
       ],
     ].filter((row) => row.length > 0)
   );
@@ -105,7 +119,7 @@ function bankBoardInlineKeyboard(board: BankBoard, page = 0) {
   rows.push(navigation);
   rows.push([
     Markup.button.callback('Yangilash', `banks:${currentPage}`),
-    Markup.button.callback('Markaziy bank', 'menu:overview'),
+    Markup.button.callback('🏛 Markaziy bank', 'menu:overview'),
   ]);
 
   return Markup.inlineKeyboard(rows.filter((row) => row.length > 0));
@@ -115,7 +129,7 @@ function bankDetailInlineKeyboard(page = 0) {
   return Markup.inlineKeyboard([
     [
       Markup.button.callback('‹ Banklar', `banks:${page}`),
-      Markup.button.callback('Markaziy bank', 'menu:overview'),
+      Markup.button.callback('🏛 Markaziy bank', 'menu:overview'),
     ],
   ]);
 }
@@ -158,16 +172,16 @@ function formatOverviewMessage(currencies: CurrencySummary[]): string {
   const lines = currencies.slice(0, 8).map((currency) => {
     const icon = trendIcon(currency.trend);
     return (
-      `${icon} <b>${currency.code}</b> ${formatRate(currency.cbRate)} so'm\n` +
+      `${icon} ${flag(currency.code)} <b>${currency.code}</b> ${formatRate(currency.cbRate)} so'm\n` +
       `   ${formatDiff(currency)} | qamrov ${currency.reportingBanks}/${currency.totalBanks} bank`
     );
   });
 
   return (
-    `<b>Markaziy bank kurslari</b>\n` +
+    `🏛 <b>Markaziy bank kurslari</b>\n` +
     `${currencies[0]?.date || ''}\n\n` +
     `${lines.join('\n\n')}\n\n` +
-    `Valyutani tanlang yoki pastdagi "Banklar" tugmasi bilan USD boardni oching.`
+    `Valyutani tanlang yoki «🏦 Banklar» tugmasini bosing.`
   );
 }
 
@@ -180,7 +194,7 @@ function formatCurrencyMessage(currency: string, details: CurrencyDetails): stri
   }
 
   const header =
-    `${trendIcon(summary.trend)} <b>${currency}</b> ${formatRate(summary.cbRate)} so'm\n` +
+    `${trendIcon(summary.trend)} ${flag(currency)} <b>${currency}</b> ${formatRate(summary.cbRate)} so'm\n` +
     `${summary.date} | o'zgarish ${formatDiff(summary)}\n` +
     `Qamrov: ${summary.reportingBanks}/${summary.totalBanks} bank\n` +
     `Eng yaxshi xarid: ${formatRate(summary.bestBuy)} | eng yaxshi sotish: ${formatRate(summary.bestSell)}`;
@@ -296,26 +310,27 @@ export async function stopBot(): Promise<void> {
 
 function registerHandlers(botInstance: Telegraf): void {
   botInstance.start(async (ctx) => {
+    const isNewUser = ctx.from
+      ? !(await userRepository.findByTelegramId(BigInt(ctx.from.id)))
+      : false;
     await trackUser(ctx, '/start');
     const name = ctx.from?.first_name || 'Foydalanuvchi';
 
     await ctx.reply(
-      `Salom, ${name}!\n\n` +
-        `<b>Valyuta Tracker</b>\n` +
-        `Default holatda 30 ta bankning bugungi USD kursini ko'rsataman.\n` +
-        `Valyuta kesimini ko'rish uchun /rates, banklar uchun /banks yuboring.`,
+      `Salom, ${name}! 👋\n\n` +
+        `💱 <b>Valyuta Tracker</b>\n` +
+        `Pastdagi «${VIEW_RATES_BUTTON}» tugmasini bosing — Markaziy bank kurslari va banklar kesimini ko'rsataman.`,
       {
         parse_mode: 'HTML',
-        ...Markup.keyboard([
-          ['USD', 'EUR', 'RUB'],
-          ['GBP', 'CNY', 'JPY'],
-          ['/banks', '/rates'],
-          ['/help'],
-        ]).resize(),
+        ...Markup.keyboard([[VIEW_RATES_BUTTON]]).resize(),
       }
     );
 
-    await sendBankBoard(ctx);
+    await sendOverview(ctx);
+
+    if (isNewUser) {
+      void maybeRefreshForNewUser();
+    }
   });
 
   botInstance.command('banks', async (ctx) => {
@@ -337,8 +352,13 @@ function registerHandlers(botInstance: Telegraf): void {
         `/rates - Markaziy bank kurslari va trendlar\n` +
         `/usd, /eur, /rub - banklar kesimidagi kurslar\n` +
         `/help - yordam\n\n` +
-        `Bank tugmasini bossangiz, logo va mavjud valyutalar chiqadi.`
+        `Pastdagi «${VIEW_RATES_BUTTON}» tugmasi orqali Markaziy bank kursini ko'rasiz.`
     );
+  });
+
+  botInstance.hears(VIEW_RATES_BUTTON, async (ctx) => {
+    await trackUser(ctx, 'view_rates_button');
+    await sendOverview(ctx);
   });
 
   for (const currency of CURRENCIES) {
@@ -485,6 +505,23 @@ async function trackUser(ctx: Context, command: string): Promise<void> {
     }
   } catch (error) {
     logger.error('trackUser error:', error);
+  }
+}
+
+// Yangi foydalanuvchi /start bosganda fon rejimida kurslarni yangilaymiz.
+// Ko'p user bir vaqtda qo'shilsa scraper'ni urmaslik uchun throttle bor.
+async function maybeRefreshForNewUser(): Promise<void> {
+  const now = Date.now();
+  if (now - lastNewUserScrapeAt < NEW_USER_SCRAPE_THROTTLE_MS) {
+    return;
+  }
+  lastNewUserScrapeAt = now;
+  try {
+    logger.info('🆕 New user joined — running background rates refresh');
+    const r = await ratesService.refreshAllRates();
+    logger.info(`🆕 New-user refresh done. CBU: ${r.cbuRates}, banks: ${r.bankResults.length}`);
+  } catch (error) {
+    logger.error('New-user refresh failed:', error);
   }
 }
 

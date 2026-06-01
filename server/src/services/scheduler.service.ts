@@ -12,6 +12,10 @@ import { SchedulerStatus } from '../types';
 let isRunning = false;
 let lastRun: Date | null = null;
 
+// Scrape har soatda ishlaydi, lekin foydalanuvchilarga xabar faqat shu
+// Toshkent soatlarida yuboriladi (har soatda spam bo'lmasligi uchun).
+const NOTIFY_HOURS = [9, 16];
+
 export function startScheduler(): void {
   const cronExpression = env.SCRAPE_INTERVAL;
 
@@ -37,8 +41,16 @@ export function startScheduler(): void {
         `Duration: ${result.totalDuration}ms. Errors: ${result.errors.length}`
       );
 
-      // Notify Telegram subscribers on successful CBU update
-      if (result.cbuRates > 0) {
+      // Notify only at the configured Tashkent hours (09:00 & 16:00).
+      const tashkentHour =
+        Number(
+          new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Tashkent',
+            hour: 'numeric',
+            hour12: false,
+          }).format(new Date())
+        ) % 24;
+      if (result.cbuRates > 0 && NOTIFY_HOURS.includes(tashkentHour)) {
         try {
           await notifyUsersAboutRates();
         } catch (notifError) {
