@@ -80,6 +80,8 @@ export default function BanksPage() {
   const [selectedBankCode, setSelectedBankCode] = useState<string | null>(null);
   const [loadingBoard, setLoadingBoard] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(true);
+  const [refreshingBank, setRefreshingBank] = useState(false);
+  const [refreshMsg, setRefreshMsg] = useState('');
 
   useEffect(() => {
     void loadBoard();
@@ -139,6 +141,28 @@ export default function BanksPage() {
     startTransition(() => {
       setSelectedBankCode(bankCode);
     });
+  };
+
+  const handleBankRefresh = async () => {
+    if (!selectedBankCode) {
+      return;
+    }
+
+    setRefreshingBank(true);
+    setRefreshMsg('');
+
+    try {
+      const { data } = await api.post(`/admin/banks/${selectedBankCode}/refresh`);
+      setRefreshMsg(data.message || 'Yangilash boshlandi.');
+      setTimeout(() => {
+        void loadBoard(selectedBankCode);
+        void loadDetails(selectedBankCode);
+      }, 5000);
+    } catch (err: any) {
+      setRefreshMsg(err.response?.data?.message || 'Xatolik yuz berdi');
+    } finally {
+      setRefreshingBank(false);
+    }
   };
 
   const filteredBanks = useMemo(() => {
@@ -359,17 +383,32 @@ export default function BanksPage() {
                 Bankning rasmi va hozir mavjud barcha valyutalari.
               </p>
             </div>
-            {details?.bank.website && (
-              <a
-                href={details.bank.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-surface-700 bg-surface-950/55 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-sky-400/25 hover:text-sky-300"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Sayt
-              </a>
-            )}
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleBankRefresh}
+                  disabled={!selectedBankCode || refreshingBank}
+                  className="btn-secondary"
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshingBank ? 'animate-spin' : ''}`} />
+                  {refreshingBank ? "Yangilanmoqda..." : "Bankni yangilash"}
+                </button>
+                {details?.bank.website && (
+                  <a
+                    href={details.bank.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-surface-700 bg-surface-950/55 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-sky-400/25 hover:text-sky-300"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Sayt
+                  </a>
+                )}
+              </div>
+              {refreshMsg && (
+                <p className="animate-fade-in text-xs text-emerald-400">{refreshMsg}</p>
+              )}
+            </div>
           </div>
 
           <div className="mt-6 rounded-[32px] border border-white/10 bg-white/5 p-5">
