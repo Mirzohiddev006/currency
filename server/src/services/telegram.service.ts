@@ -266,9 +266,15 @@ export async function startBot(): Promise<void> {
   const botInstance = getBot();
 
   try {
-    if (env.TELEGRAM_WEBHOOK_URL) {
-      await botInstance.telegram.setWebhook(`${env.TELEGRAM_WEBHOOK_URL}/api/bot/webhook`);
-      logger.info('Telegram webhook configured');
+    // Prefer webhook mode. On Render free tier this is essential: when the
+    // instance is woken by an incoming Telegram update (POST /api/bot/webhook),
+    // polling would have already missed messages during sleep. Render injects
+    // RENDER_EXTERNAL_URL automatically, so webhook works with no manual env.
+    const webhookBase = env.TELEGRAM_WEBHOOK_URL || process.env.RENDER_EXTERNAL_URL;
+    if (webhookBase) {
+      const url = `${webhookBase.replace(/\/$/, '')}/api/bot/webhook`;
+      await botInstance.telegram.setWebhook(url);
+      logger.info(`Telegram webhook configured: ${url}`);
       return;
     }
 

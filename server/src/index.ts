@@ -7,7 +7,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 import { env } from './config/env';
+import { swaggerSpec } from './config/swagger';
 import { logger } from './config/logger';
 import prisma from './config/database';
 import routes from './routes/index';
@@ -29,8 +31,14 @@ app.set('trust proxy', 1);
 app.use(helmet({
   contentSecurityPolicy: env.NODE_ENV === 'production' ? undefined : false,
 }));
+const allowedOrigins = env.CLIENT_URL.split(',').map((o) => o.trim()).filter(Boolean);
 app.use(cors({
-  origin: env.CLIENT_URL,
+  origin(origin, callback) {
+    // Allow non-browser clients (no Origin header) and any whitelisted origin.
+    // CLIENT_URL may be a comma-separated list (Render + Vercel admin + webapp).
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS: ' + origin));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 }));
@@ -67,6 +75,11 @@ if (env.NODE_ENV === 'development') {
 }
 
 // ── Routes ───────────────────────────────────────────────
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customSiteTitle: 'Currency Tracker API',
+}));
+app.get('/api/docs.json', (_req, res) => res.json(swaggerSpec));
+
 app.use('/api', routes);
 
 // ── Health Check ─────────────────────────────────────────
