@@ -2,7 +2,6 @@ import { BankSeedData } from '../types';
 
 export interface BankCatalogEntry extends BankSeedData {
   bankUzSlug?: string;
-  kursUzAliases?: string[];
 }
 
 export const BANK_CATALOG: BankCatalogEntry[] = [
@@ -20,7 +19,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Agrobank',
     website: 'https://agrobank.uz',
     bankUzSlug: 'agrobank',
-    kursUzAliases: ['agrobank'],
   },
   {
     code: 'aloqabank',
@@ -28,7 +26,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Aloqabank',
     website: 'https://aloqabank.uz',
     bankUzSlug: 'aloqabank',
-    kursUzAliases: ['aloqabank'],
   },
   {
     code: 'anorbank',
@@ -36,7 +33,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Anorbank',
     website: 'https://anorbank.uz',
     bankUzSlug: 'anor-bank',
-    kursUzAliases: ['anorbank'],
   },
   {
     code: 'apexbank',
@@ -51,7 +47,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Asia Alliance Bank',
     website: 'https://aab.uz',
     bankUzSlug: 'asia-alliance-bank',
-    kursUzAliases: ['aab'],
   },
   {
     code: 'asakabank',
@@ -59,7 +54,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Asakabank',
     website: 'https://asakabank.uz',
     bankUzSlug: 'asaka-bank',
-    kursUzAliases: ['asakabank'],
   },
   {
     code: 'brb',
@@ -67,7 +61,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'BRB',
     website: 'https://brb.uz',
     bankUzSlug: 'qishloq-qurilish-bank',
-    kursUzAliases: ['qqb'],
   },
   {
     code: 'davrbank',
@@ -75,7 +68,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Davr Bank',
     website: 'https://davrbank.uz',
     logoUrl: 'https://davrbank.uz/favicon.ico',
-    kursUzAliases: ['davrbank'],
   },
   {
     code: 'garantbank',
@@ -83,7 +75,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Garant Bank',
     website: 'https://garantbank.uz',
     bankUzSlug: 'savdogar-bank',
-    kursUzAliases: ['garantbank'],
   },
   {
     code: 'hamkorbank',
@@ -91,7 +82,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Hamkorbank',
     website: 'https://hamkorbank.uz',
     bankUzSlug: 'hamkorbank',
-    kursUzAliases: ['hamkorbank', 'hamkor'],
   },
   {
     code: 'hayotbank',
@@ -106,7 +96,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Infinbank',
     website: 'https://infinbank.com',
     bankUzSlug: 'invest-finance-bank',
-    kursUzAliases: ['infinbank'],
   },
   {
     code: 'ipakyulibank',
@@ -114,7 +103,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Ipak Yuli Bank',
     website: 'https://ipakyulibank.uz',
     bankUzSlug: 'ipakyulibank',
-    kursUzAliases: ['ipakyulibank'],
   },
   {
     code: 'ipotekabank',
@@ -122,7 +110,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Ipoteka bank',
     website: 'https://ipotekabank.uz',
     bankUzSlug: 'ipoteka-bank',
-    kursUzAliases: ['ipotekabank'],
   },
   {
     code: 'kapitalbank',
@@ -130,7 +117,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Kapitalbank',
     website: 'https://kapitalbank.uz',
     bankUzSlug: 'kapitalbank',
-    kursUzAliases: ['kapitalbank'],
   },
   {
     code: 'mkbank',
@@ -138,7 +124,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'MKBank',
     website: 'https://mkbank.uz',
     bankUzSlug: 'mikrokreditbank',
-    kursUzAliases: ['mkbank'],
   },
   {
     code: 'nbu',
@@ -146,7 +131,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: "O'zbekiston Milliy banki",
     website: 'https://nbu.uz',
     bankUzSlug: 'nbu',
-    kursUzAliases: ['nbu'],
   },
   {
     code: 'octobank',
@@ -154,7 +138,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Octobank',
     website: 'https://octobank.uz',
     bankUzSlug: 'ravnaq-bank',
-    kursUzAliases: ['ravnaqbank'],
   },
   {
     code: 'ofb',
@@ -162,7 +145,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Orient Finans Bank',
     website: 'https://ofb.uz',
     bankUzSlug: 'orient-finans-bank',
-    kursUzAliases: ['ofb'],
   },
   {
     code: 'poytaxtbank',
@@ -177,7 +159,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Saderat Bank',
     website: 'https://saderatbank.uz',
     bankUzSlug: 'saderat-bank-tashkent',
-    kursUzAliases: ['saderatbank'],
   },
   {
     code: 'tbcbank',
@@ -185,7 +166,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'TBC Bank Uzbekistan',
     website: 'https://tbcbank.uz',
     logoUrl: 'https://tbcbank.uz/favicon.ico',
-    kursUzAliases: ['tbcbank', 'tbc'],
   },
   {
     code: 'tengebank',
@@ -193,7 +173,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Tenge Bank',
     website: 'https://tengebank.uz',
     bankUzSlug: 'tenge-bank',
-    kursUzAliases: ['tengebank'],
   },
   {
     code: 'trustbank',
@@ -201,7 +180,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Trustbank',
     website: 'https://trustbank.uz',
     bankUzSlug: 'trastbank',
-    kursUzAliases: ['trustbank'],
   },
   {
     code: 'turonbank',
@@ -209,7 +187,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Turon bank',
     website: 'https://turonbank.uz',
     bankUzSlug: 'turonbank',
-    kursUzAliases: ['turonbank'],
   },
   {
     code: 'universalbank',
@@ -217,7 +194,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Universal bank',
     website: 'https://universalbank.uz',
     bankUzSlug: 'universalbank',
-    kursUzAliases: ['universalbank'],
   },
   {
     code: 'uzkdbbank',
@@ -232,15 +208,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: "O'zsanoatqurilishbank",
     website: 'https://sqb.uz',
     bankUzSlug: 'sanoat-qurilish-bank',
-    kursUzAliases: ['sqb', 'uzpromstroybank', 'uzpsb'],
-  },
-  {
-    code: 'uzumbank',
-    name: 'Uzum Bank',
-    nameUz: 'Uzum Bank',
-    website: 'https://uzumbank.uz',
-    logoUrl: 'https://uzumbank.uz/favicon.ico',
-    kursUzAliases: ['uzumbank'],
   },
   {
     code: 'xalqbank',
@@ -248,7 +215,6 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Xalq Banki',
     website: 'https://xb.uz',
     bankUzSlug: 'xalq-bank',
-    kursUzAliases: ['xalqbank', 'xalq'],
   },
   {
     code: 'ziraatbank',
@@ -256,28 +222,15 @@ export const BANK_CATALOG: BankCatalogEntry[] = [
     nameUz: 'Ziraat Bank',
     website: 'https://ziraatbank.uz',
     bankUzSlug: 'ziraat-bank-uzbekistan',
-    kursUzAliases: ['ziraatbank'],
   },
 ];
 
 export const BANKS_SEED: BankSeedData[] = BANK_CATALOG.map(
-  ({ bankUzSlug: _bankUzSlug, kursUzAliases: _kursUzAliases, ...bank }) => bank
+  ({ bankUzSlug: _bankUzSlug, ...bank }) => bank
 );
 
 export const BANK_UZ_BANKS = BANK_CATALOG.filter(
   (bank): bank is BankCatalogEntry & { bankUzSlug: string } => Boolean(bank.bankUzSlug)
-);
-
-export const BANK_ALIAS_MAP: Record<string, string> = Object.fromEntries(
-  BANK_CATALOG.flatMap((bank) => {
-    const aliases = new Set<string>([
-      bank.code.toLowerCase(),
-      ...(bank.bankUzSlug ? [bank.bankUzSlug.toLowerCase()] : []),
-      ...((bank.kursUzAliases || []).map((alias) => alias.toLowerCase())),
-    ]);
-
-    return [...aliases].map((alias) => [alias, bank.code]);
-  })
 );
 
 export const PRIORITY_CURRENCIES = ['USD', 'EUR', 'RUB', 'GBP', 'CNY', 'JPY', 'KZT', 'KGS', 'TRY', 'AED'];

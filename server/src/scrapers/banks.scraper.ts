@@ -1,14 +1,12 @@
 import https from "https";
 import * as cheerio from "cheerio";
-import { BANK_ALIAS_MAP, BANK_UZ_BANKS } from "../config/banks";
+import { BANK_UZ_BANKS } from "../config/banks";
 import { logger } from "../config/logger";
 import { scraperHttpClient } from "../lib/http-client";
 import { withRetry } from "../lib/retry";
 import { BankRateResult, ScrapeResult } from "../types";
 
 const BANK_UZ_BASE_URL = "https://bank.uz";
-const KURS_UZ_SUPPORTED_CURRENCIES = ["USD", "RUB"];
-const KURS_UZ_CACHE_TTL_MS = 10 * 60 * 1000;
 const SCRAPE_CONCURRENCY = 5;
 const insecureHttpsAgent = new https.Agent({ rejectUnauthorized: false });
 const CURRENCY_NAME_CODE_MAP: Record<string, string> = {
@@ -24,8 +22,6 @@ type ScrapedBankPayload = {
   logoUrl?: string | null;
 };
 
-let kursUzCache: { fetchedAt: number; rates: BankRateResult[] } | null = null;
-let kursUzPromise: Promise<BankRateResult[]> | null = null;
 
 async function mapWithConcurrency<T, R>(
   items: T[],
@@ -139,13 +135,6 @@ function dedupeRates(rates: BankRateResult[]): BankRateResult[] {
   }
 
   return [...uniqueRates.values()];
-}
-
-function mergeRates(
-  primary: BankRateResult[],
-  fallback: BankRateResult[],
-): BankRateResult[] {
-  return dedupeRates([...primary, ...fallback]);
 }
 
 function parseTbcTable(html: string): BankRateResult[] {
@@ -297,108 +286,22 @@ function parseBankUzDetail(html: string, bankCode: string): ScrapedBankPayload {
   };
 }
 
-async function fetchKursUzRates(): Promise<BankRateResult[]> {
-  if (
-    kursUzCache &&
-    Date.now() - kursUzCache.fetchedAt < KURS_UZ_CACHE_TTL_MS
-  ) {
-    return kursUzCache.rates;
-  }
-
-  if (!kursUzPromise) {
-    kursUzPromise = (async () => {
-      const responses = await Promise.all(
-        KURS_UZ_SUPPORTED_CURRENCIES.map(async (currency) => {
-          const response = await scraperHttpClient.get(
-            `https://kurs.uz/ru/data/currencies?by_bank=all&by_currency=${currency}&sort_by=bank`,
-          );
-
-          const $ = cheerio.load(
-            `<table><tbody>${response.data}</tbody></table>`,
-          );
-          const rows: BankRateResult[] = [];
-
-          $("tr").each((_, row) => {
-            const cells = $(row).find("td");
-            if (cells.length < 3) {
-              return;
-            }
-
-            const href = $(cells[0]).find("a").attr("href") || "";
-            const slugFromHref = href.match(/\/banks\/([^/]+)\//)?.[1];
-            const slugFromValue =
-              $(cells[0]).find("[data-value]").attr("data-value") ||
-              normalizeWhitespace($(cells[0]).text())
-                .toLowerCase()
-                .replace(/\s+/g, "");
-            const bankCode =
-              (slugFromHref && BANK_ALIAS_MAP[slugFromHref.toLowerCase()]) ||
-              BANK_ALIAS_MAP[slugFromValue.toLowerCase()];
-
-            if (!bankCode) {
-              return;
-            }
-
-            const buyRate = parseRate($(cells[1]).text());
-            const sellRate = parseRate($(cells[2]).text());
-
-            if (buyRate || sellRate) {
-              rows.push({
-                bankCode,
-                currency,
-                code: currency,
-                buyRate,
-                sellRate,
-              });
-            }
-          });
-
-          return rows;
-        }),
-      );
-
-      const rates = dedupeRates(responses.flat());
-      kursUzCache = {
-        fetchedAt: Date.now(),
-        rates,
-      };
-
-      return rates;
-    })().finally(() => {
-      kursUzPromise = null;
-    });
-  }
-
-  return kursUzPromise;
-}
-
-async function getKursUzRatesForBank(
-  bankCode: string,
-): Promise<BankRateResult[]> {
-  const rates = await fetchKursUzRates();
-  return rates.filter((rate) => rate.bankCode === bankCode);
-}
 
 async function scrapeWithFallback(
   bankCode: string,
   primaryScraper?: () => Promise<ScrapedBankPayload>,
 ): Promise<ScrapedBankPayload> {
-  let primary: ScrapedBankPayload = { rates: [] };
-
-  if (primaryScraper) {
-    try {
-      primary = await primaryScraper();
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      logger.warn(`[Scraper] ${bankCode} primary source failed: ${message}`);
-    }
+  if (!primaryScraper) {
+    return { rates: [] };
   }
 
-  const fallbackRates = await getKursUzRatesForBank(bankCode);
-  return {
-    logoUrl: primary.logoUrl ?? null,
-    rates: mergeRates(primary.rates, fallbackRates),
-  };
+  try {
+    return await primaryScraper();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn(`[Scraper] ${bankCode} source failed: ${message}`);
+    return { rates: [] };
+  }
 }
 
 async function scrapeBankWithRetry(
@@ -464,14 +367,6 @@ async function scrapeApexBank(): Promise<ScrapedBankPayload> {
   });
 }
 
-async function scrapeKursOnlyBank(
-  bankCode: string,
-): Promise<ScrapedBankPayload> {
-  return {
-    rates: await getKursUzRatesForBank(bankCode),
-  };
-}
-
 export const BANK_SCRAPERS: Record<string, () => Promise<ScrapedBankPayload>> =
   {
     ...Object.fromEntries(
@@ -483,7 +378,6 @@ export const BANK_SCRAPERS: Record<string, () => Promise<ScrapedBankPayload>> =
     apexbank: scrapeApexBank,
     tbcbank: scrapeTbcBank,
     davrbank: scrapeDavrbank,
-    uzumbank: () => scrapeKursOnlyBank("uzumbank"),
   };
 
 export async function scrapeBank(bankCode: string): Promise<ScrapeResult> {

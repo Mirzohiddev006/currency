@@ -11,7 +11,7 @@ const scraperAgent = new https.Agent({
 });
 
 export const scraperHttpClient = axios.create({
-  timeout: 45000,
+  timeout: 12000,
   httpsAgent: scraperAgent,
   headers: {
     "User-Agent":
