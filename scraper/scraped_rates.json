@@ -1,0 +1,2327 @@
+{
+  "scraped_at": "2026-06-02 13:54:07",
+  "total_rates": 232,
+  "banks_count": 31,
+  "rates": [
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14840.0,
+      "sell_rate": 15540.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13750.0,
+      "sell_rate": 14000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15720.0,
+      "sell_rate": 16410.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 66.0,
+      "sell_rate": 76.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "RUB",
+      "currency": "RUB",
+      "buy_rate": 157.0,
+      "sell_rate": 167.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aab",
+      "bank": "Asia Alliance Bank",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11915.0,
+      "sell_rate": 11975.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14350.0,
+      "sell_rate": 15650.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13700.0,
+      "sell_rate": 14200.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15400.0,
+      "sell_rate": 16500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 65.0,
+      "sell_rate": 85.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": null,
+      "sell_rate": 180.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "agrobank",
+      "bank": "Agrobank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 15000.0,
+      "sell_rate": 16000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13500.0,
+      "sell_rate": 14500.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15500.0,
+      "sell_rate": 16500.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 70.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "RUB",
+      "currency": "RUB",
+      "buy_rate": 95.0,
+      "sell_rate": 180.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "aloqabank",
+      "bank": "Aloqabank",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11900.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14240.0,
+      "sell_rate": null,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13630.0,
+      "sell_rate": 14150.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15430.0,
+      "sell_rate": null,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 16.0,
+      "sell_rate": 27.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 80.0,
+      "sell_rate": 172.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "anorbank",
+      "bank": "Anorbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "apexbank",
+      "bank": "Apex Bank",
+      "code": "EUR",
+      "currency": "Yevro",
+      "buy_rate": 13000.0,
+      "sell_rate": 14000.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "apexbank",
+      "bank": "Apex Bank",
+      "code": "RUB",
+      "currency": "RUB",
+      "buy_rate": 100.0,
+      "sell_rate": 170.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "asakabank",
+      "bank": "Asaka Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14700.0,
+      "sell_rate": 15800.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "asakabank",
+      "bank": "Asaka Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13300.0,
+      "sell_rate": 14450.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "asakabank",
+      "bank": "Asaka Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15750.0,
+      "sell_rate": 16750.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "asakabank",
+      "bank": "Asaka Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 135.0,
+      "sell_rate": 190.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "asakabank",
+      "bank": "Asaka Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14900.0,
+      "sell_rate": 15600.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13600.0,
+      "sell_rate": 14300.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15800.0,
+      "sell_rate": 16500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 90.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 140.0,
+      "sell_rate": 171.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "brb",
+      "bank": "BRB",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11920.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "AED",
+      "currency": "BAA dirhami",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3253.38,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "AFN",
+      "currency": "Afg‘oniston afg‘onisi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 186.97,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "AMD",
+      "currency": "Armaniston drami",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 32.45,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "ARS",
+      "currency": "Argentina pesosi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 8.48,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "AUD",
+      "currency": "Avstraliya dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 8578.21,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "AZN",
+      "currency": "Ozarbayjon manati",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 7028.84,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "BDT",
+      "currency": "Bangladesh takasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 97.34,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "BHD",
+      "currency": "Bahrayn dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 31695.04,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "BND",
+      "currency": "Bruney dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 9351.98,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "BRL",
+      "currency": "Braziliya reali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 2372.3,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "BYN",
+      "currency": "Belorus rubli",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 4325.28,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "CAD",
+      "currency": "Kanada dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 8646.81,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "CHF",
+      "currency": "Shveytsariya franki",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 15241.11,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "CNY",
+      "currency": "Xitoy yuani",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1766.25,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "CUP",
+      "currency": "Kuba pesosi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 497.88,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "CZK",
+      "currency": "Chexiya kronasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 573.18,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "DKK",
+      "currency": "Daniya kronasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1862.79,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "DZD",
+      "currency": "Jazoir dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 90.17,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "EGP",
+      "currency": "Misr funti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 229.48,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "EUR",
+      "currency": "EVRO",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 13921.81,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "GBP",
+      "currency": "Angliya funt sterlingi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 16083.39,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "GEL",
+      "currency": "Gruziya larisi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 4490.43,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "HKD",
+      "currency": "Gongkong dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1524.69,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "HUF",
+      "currency": "Vengriya forinti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 39.28,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "IDR",
+      "currency": "Indoneziya rupiyasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 0.67,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "ILS",
+      "currency": "Isroil shekeli",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 4243.11,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "INR",
+      "currency": "Hindiston rupiyasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 125.78,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "IQD",
+      "currency": "Iroq dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 9.12,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "IRR",
+      "currency": "Eron riali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 0.01,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "ISK",
+      "currency": "Islandiya kronasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 96.95,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "JOD",
+      "currency": "Iordaniya dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 16853.36,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "JPY",
+      "currency": "Yaponiya iyenasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 74.94,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "KGS",
+      "currency": "Qirg‘iz somi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 136.6,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "KHR",
+      "currency": "Kambodja riyeli",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 2.98,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "KRW",
+      "currency": "Koreya Respublikasi voni",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 7.92,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "KWD",
+      "currency": "Quvayt dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 38959.99,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "KZT",
+      "currency": "Qozog‘iston tengesi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 24.44,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "LAK",
+      "currency": "Laos kipisi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 0.55,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "LBP",
+      "currency": "Livan funti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 0.13,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "LYD",
+      "currency": "Liviya dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1881.23,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MAD",
+      "currency": "Marokash dirhami",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1300.42,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MDL",
+      "currency": "Moldaviya leyi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 692.7,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MMK",
+      "currency": "Myanma kyati",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 5.69,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MNT",
+      "currency": "Mongoliya tugriki",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3.34,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MXN",
+      "currency": "Meksika pesosi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 689.54,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "MYR",
+      "currency": "Malayziya ringgiti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3013.63,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "NOK",
+      "currency": "Norvegiya kronasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1292.19,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "NZD",
+      "currency": "Yangi Zelandiya dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 7112.06,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "OMR",
+      "currency": "Ummon riali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 31036.44,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "PHP",
+      "currency": "Filippin pesosi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 193.57,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "PKR",
+      "currency": "Pokiston rupiyasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 42.92,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "PLN",
+      "currency": "Polsha zlotiysi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3287.22,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "QAR",
+      "currency": "Qatar riali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3277.93,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "RON",
+      "currency": "Ruminiya leyi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 2649.8,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "RSD",
+      "currency": "Serbiya dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 118.58,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "RUB",
+      "currency": "Rossiya rubli",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 166.28,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "SAR",
+      "currency": "Saudiya Arabistoni riali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3184.03,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "SDG",
+      "currency": "Sudan funti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 19.91,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "SEK",
+      "currency": "Shvetsiya kronasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1288.47,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "SGD",
+      "currency": "Singapur dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 9351.98,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "SYP",
+      "currency": "Suriya funti",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 103.45,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "THB",
+      "currency": "Tailand bati",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 366.76,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "TJS",
+      "currency": "Tojikiston somonisi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 1294.59,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "TMT",
+      "currency": "Turkmaniston manati",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 3414.01,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "TND",
+      "currency": "Tunis dinori",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 4100.42,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "TRY",
+      "currency": "Turkiya lirasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 260.26,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "UAH",
+      "currency": "Ukraina grivnasi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 269.68,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "USD",
+      "currency": "AQSH dollari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 11949.03,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "UYU",
+      "currency": "Urugvay pesosi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 297.61,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "VES",
+      "currency": "Venesuela bolivari",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 21.58,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "VND",
+      "currency": "Vetnam dongi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 0.45,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "XDR",
+      "currency": "SDR",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 16355.27,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "YER",
+      "currency": "Yaman riali",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 50.09,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "cbu",
+      "bank": "Central Bank",
+      "code": "ZAR",
+      "currency": "Janubiy Afrika randi",
+      "buy_rate": null,
+      "sell_rate": null,
+      "cb_rate": 735.56,
+      "source": "cbu-api"
+    },
+    {
+      "bank_code": "davrbank",
+      "bank": "Davr Bank",
+      "code": "CHF",
+      "currency": "Shveytsariya franki",
+      "buy_rate": 14400.0,
+      "sell_rate": 16400.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "davrbank",
+      "bank": "Davr Bank",
+      "code": "EUR",
+      "currency": "Yevro",
+      "buy_rate": 13400.0,
+      "sell_rate": 14100.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "davrbank",
+      "bank": "Davr Bank",
+      "code": "GBP",
+      "currency": "Funt sterling",
+      "buy_rate": 14450.0,
+      "sell_rate": 16450.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "davrbank",
+      "bank": "Davr Bank",
+      "code": "JPY",
+      "currency": "Yapon yenasi",
+      "buy_rate": 70.0,
+      "sell_rate": 95.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "davrbank",
+      "bank": "Davr Bank",
+      "code": "USD",
+      "currency": "AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11970.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14000.0,
+      "sell_rate": 16800.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 15500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 14800.0,
+      "sell_rate": 17700.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 70.0,
+      "sell_rate": 120.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 100.0,
+      "sell_rate": 180.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "garantbank",
+      "bank": "Garant Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11900.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14500.0,
+      "sell_rate": 16000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13200.0,
+      "sell_rate": 14000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15300.0,
+      "sell_rate": 16900.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 71.0,
+      "sell_rate": 79.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 148.0,
+      "sell_rate": 168.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hamkorbank",
+      "bank": "Hamkorbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14700.0,
+      "sell_rate": 15500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13650.0,
+      "sell_rate": 14140.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15400.0,
+      "sell_rate": 16600.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 40.0,
+      "sell_rate": 75.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 23.0,
+      "sell_rate": 25.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 138.0,
+      "sell_rate": 168.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "hayotbank",
+      "bank": "Hayot Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11900.0,
+      "sell_rate": 11970.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14000.0,
+      "sell_rate": 16000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 15000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15000.0,
+      "sell_rate": 17000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 155.0,
+      "sell_rate": 170.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "infinbank",
+      "bank": "Infinbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11900.0,
+      "sell_rate": 11980.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14640.0,
+      "sell_rate": 15730.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13440.0,
+      "sell_rate": 14370.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15500.0,
+      "sell_rate": 16600.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 57.0,
+      "sell_rate": 78.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 145.0,
+      "sell_rate": 173.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipakyulibank",
+      "bank": "Ipak Yuli Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11900.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ipotekabank",
+      "bank": "Ipoteka Bank",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13000.0,
+      "sell_rate": 14050.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "ipotekabank",
+      "bank": "Ipoteka Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 13850.0,
+      "sell_rate": 17300.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "ipotekabank",
+      "bank": "Ipoteka Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 65.0,
+      "sell_rate": 81.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "ipotekabank",
+      "bank": "Ipoteka Bank",
+      "code": "RUB",
+      "currency": "RUB",
+      "buy_rate": 100.0,
+      "sell_rate": 172.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "ipotekabank",
+      "bank": "Ipoteka Bank",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11885.0,
+      "sell_rate": 11995.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14660.0,
+      "sell_rate": 15780.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13460.0,
+      "sell_rate": 14070.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15500.0,
+      "sell_rate": 16680.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 63.0,
+      "sell_rate": 83.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 22.0,
+      "sell_rate": 25.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 156.0,
+      "sell_rate": 169.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "kapitalbank",
+      "bank": "Kapitalbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11910.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "mkbank",
+      "bank": "MKBank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14800.0,
+      "sell_rate": 15800.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "mkbank",
+      "bank": "MKBank",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13500.0,
+      "sell_rate": 14000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "mkbank",
+      "bank": "MKBank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15700.0,
+      "sell_rate": 16700.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "mkbank",
+      "bank": "MKBank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "mkbank",
+      "bank": "MKBank",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11940.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14920.0,
+      "sell_rate": 15520.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13770.0,
+      "sell_rate": 13980.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15800.0,
+      "sell_rate": 16400.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 65.0,
+      "sell_rate": 80.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 16.0,
+      "sell_rate": 27.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 150.0,
+      "sell_rate": 180.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "nbu",
+      "bank": "National Bank of Uzbekistan",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11920.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 12000.0,
+      "sell_rate": 18500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13650.0,
+      "sell_rate": 13950.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 13500.0,
+      "sell_rate": 18800.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 40.0,
+      "sell_rate": 115.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 158.0,
+      "sell_rate": 167.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "octobank",
+      "bank": "Octobank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 13300.0,
+      "sell_rate": 16800.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13700.0,
+      "sell_rate": 15000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 14800.0,
+      "sell_rate": 18000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 60.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 90.0,
+      "sell_rate": 172.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ofb",
+      "bank": "Orient Finans Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 13300.0,
+      "sell_rate": 16300.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13100.0,
+      "sell_rate": 14500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 14500.0,
+      "sell_rate": 17100.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 78.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 150.0,
+      "sell_rate": 175.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "poytaxtbank",
+      "bank": "Poytaxt Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11910.0,
+      "sell_rate": 11990.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "saderatbank",
+      "bank": "Saderat Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 15500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "saderatbank",
+      "bank": "Saderat Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "tbcbank",
+      "bank": "TBC Bank Uzbekistan",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13500.0,
+      "sell_rate": 14400.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "tbcbank",
+      "bank": "TBC Bank Uzbekistan",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11900.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "own-site"
+    },
+    {
+      "bank_code": "tengebank",
+      "bank": "Tenge Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13560.0,
+      "sell_rate": 14360.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "tengebank",
+      "bank": "Tenge Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15650.0,
+      "sell_rate": 16650.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "tengebank",
+      "bank": "Tenge Bank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 23.0,
+      "sell_rate": 25.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "tengebank",
+      "bank": "Tenge Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 140.0,
+      "sell_rate": 172.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "tengebank",
+      "bank": "Tenge Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11860.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14950.0,
+      "sell_rate": 15550.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "EUR",
+      "currency": "EUR",
+      "buy_rate": 13400.0,
+      "sell_rate": 14000.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15750.0,
+      "sell_rate": 16400.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 60.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "RUB",
+      "currency": "RUB",
+      "buy_rate": 110.0,
+      "sell_rate": 172.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "trustbank",
+      "bank": "Trustbank",
+      "code": "USD",
+      "currency": "USD",
+      "buy_rate": 11915.0,
+      "sell_rate": 12005.0,
+      "cb_rate": null,
+      "source": "own-site+bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14000.0,
+      "sell_rate": 16500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 14500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15000.0,
+      "sell_rate": 17500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 120.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 15.0,
+      "sell_rate": 30.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 100.0,
+      "sell_rate": 175.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "turonbank",
+      "bank": "Turonbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11930.0,
+      "sell_rate": 11980.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "universalbank",
+      "bank": "Universal Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 15000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "universalbank",
+      "bank": "Universal Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15200.0,
+      "sell_rate": 18000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "universalbank",
+      "bank": "Universal Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 70.0,
+      "sell_rate": 100.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "universalbank",
+      "bank": "Universal Bank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": null,
+      "sell_rate": 170.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "universalbank",
+      "bank": "Universal Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11920.0,
+      "sell_rate": 12005.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzkdbbank",
+      "bank": "KDB Bank Uzbekistan",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13500.0,
+      "sell_rate": 14400.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzkdbbank",
+      "bank": "KDB Bank Uzbekistan",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11885.0,
+      "sell_rate": 12005.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 14900.0,
+      "sell_rate": 15500.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13600.0,
+      "sell_rate": 14200.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 15800.0,
+      "sell_rate": 16400.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 64.0,
+      "sell_rate": 84.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "RUB",
+      "currency": "Valyuta Rossiya rubli",
+      "buy_rate": 105.0,
+      "sell_rate": 168.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "uzpromstroybank",
+      "bank": "Uzsanoatqurilishbank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11890.0,
+      "sell_rate": 12000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "CHF",
+      "currency": "Valyuta Shveytsariya franki",
+      "buy_rate": 12000.0,
+      "sell_rate": 18000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13000.0,
+      "sell_rate": 14050.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "GBP",
+      "currency": "Valyuta Angliya funt sterlingi",
+      "buy_rate": 13000.0,
+      "sell_rate": 19000.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "JPY",
+      "currency": "Valyuta Yaponiya iyenasi",
+      "buy_rate": 50.0,
+      "sell_rate": 120.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "KZT",
+      "currency": "Valyuta Qozog'iston tengesi",
+      "buy_rate": 15.0,
+      "sell_rate": 25.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "xalqbank",
+      "bank": "Xalq Bank",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11900.0,
+      "sell_rate": 11960.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ziraatbank",
+      "bank": "Ziraat Bank Uzbekistan",
+      "code": "EUR",
+      "currency": "Valyuta Evro",
+      "buy_rate": 13570.0,
+      "sell_rate": 14270.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    },
+    {
+      "bank_code": "ziraatbank",
+      "bank": "Ziraat Bank Uzbekistan",
+      "code": "USD",
+      "currency": "Valyuta AQSH dollari",
+      "buy_rate": 11860.0,
+      "sell_rate": 11970.0,
+      "cb_rate": null,
+      "source": "bank.uz"
+    }
+  ]
+}

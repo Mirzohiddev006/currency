@@ -209,19 +209,107 @@ OWN_SITE_SCRAPERS = {
 }
 
 
+# ── Generic own-site parser (USD/EUR/RUB focus) ──────────────
+# Many bank sites share a [Valyuta | Sotib olish | Sotish | MB kursi] layout.
+# We only need USD/EUR/RUB from own sites; bank.uz fills the rest.
+WANTED_OWN = {"USD", "EUR", "RUB"}
+_BUY_RE = re.compile(r"sotib|xarid|\u043f\u043e\u043a\u0443\u043f\u043a|buy|olish", re.I)
+_SELL_RE = re.compile(r"sotish|\u043f\u0440\u043e\u0434\u0430\u0436|sell", re.I)
+_CB_RE = re.compile(r"\bmb\b|markaziy|\u0446\u0431|o.zb", re.I)
+_NUMTOK = re.compile(r"\d[\d  .,]*")
+# Sane UZS ranges per 1 unit — guards against mis-read columns/cells.
+_SANITY = {"USD": (10000, 14000), "EUR": (11000, 16500), "RUB": (60, 260)}
+
+# Confirmed static-HTML rate pages (own site). JS-rendered banks are not here
+# and fall through to the bank.uz fallback automatically.
+OWN_SITE_GENERIC = {
+    "ipotekabank": ("https://ipotekabank.uz/uz/currency", True),
+    "trustbank": ("https://trustbank.uz/uz", True),
+    "aloqabank": ("https://aloqabank.uz/uz", True),
+    "aab": ("https://aab.uz/uz", True),
+    "mkbank": ("https://mkbank.uz/uz", True),
+    "garantbank": ("https://garantbank.uz/uz/exchange-rates", True),
+}
+
+
+def _in_range(code, value):
+    lo, hi = _SANITY[code]
+    return value is not None and lo <= value <= hi
+
+
+def parse_generic_own_site(html, bank_code, only=WANTED_OWN):
+    """Extract USD/EUR/RUB buy/sell from a static HTML rate table.
+    Uses header keywords when available, then falls back to scanning
+    non-CB numeric cells, and finally validates against sane ranges."""
+    soup = BeautifulSoup(html, "html.parser")
+    for tbl in soup.find_all("table"):
+        rows = tbl.find_all("tr")
+        if len(rows) < 2:
+            continue
+        hdr = [c.get_text(" ", strip=True) for c in rows[0].find_all(["th", "td"])]
+        buy_i = next((i for i, h in enumerate(hdr) if _BUY_RE.search(h)), None)
+        sell_i = next((i for i, h in enumerate(hdr) if _SELL_RE.search(h)), None)
+        cb_i = next((i for i, h in enumerate(hdr) if _CB_RE.search(h)), None)
+        out = []
+        for tr in rows[1:]:
+            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
+            if len(cells) < 2:
+                continue
+            code = extract_currency_code(cells[0])
+            if code not in only:
+                continue
+            buy = sell = None
+            if buy_i is not None and sell_i is not None and max(buy_i, sell_i) < len(cells):
+                buy = parse_rate(cells[buy_i])
+                sell = parse_rate(cells[sell_i])
+            if not (_in_range(code, buy) and _in_range(code, sell)):
+                cand = []
+                for i, c in enumerate(cells):
+                    if i == 0 or i == cb_i:
+                        continue
+                    for tok in _NUMTOK.findall(c):
+                        v = parse_rate(tok)
+                        if _in_range(code, v):
+                            cand.append(v)
+                if len(cand) >= 2:
+                    buy, sell = cand[0], cand[1]
+            if _in_range(code, buy) and _in_range(code, sell):
+                if buy > sell:
+                    buy, sell = sell, buy
+                out.append({"bank_code": bank_code, "currency": code,
+                            "code": code, "buy_rate": buy, "sell_rate": sell})
+        out = dedupe_rates(out)
+        if out:
+            return out
+    return []
+
+
 def scrape_own_site(bank):
+    code = bank["code"]
+    # 1) Custom parser (tbc/davr/apex) when configured
     key = bank.get("own_site")
-    if not key or key not in OWN_SITE_SCRAPERS:
-        return []
-    url, parser, verify = OWN_SITE_SCRAPERS[key]
-    try:
-        resp = http_get(url, verify=verify)
-        rates = parser(resp.text)
-        log(f"    own-site {bank['code']}: {len(rates)} rates from {url}")
-        return rates
-    except Exception as exc:
-        log(f"    own-site {bank['code']} FAILED: {exc}")
-        return []
+    if key and key in OWN_SITE_SCRAPERS:
+        url, parser, verify = OWN_SITE_SCRAPERS[key]
+        try:
+            resp = http_get(url, verify=verify)
+            rates = parser(resp.text)
+            log(f"    own-site {code}: {len(rates)} rates from {url}")
+            return rates
+        except Exception as exc:
+            log(f"    own-site {code} FAILED: {exc}")
+            return []
+    # 2) Generic static-table parser (USD/EUR/RUB)
+    if code in OWN_SITE_GENERIC:
+        url, verify = OWN_SITE_GENERIC[code]
+        try:
+            resp = http_get(url, verify=verify)
+            rates = parse_generic_own_site(resp.text, code)
+            log(f"    own-site {code}: {len(rates)} rates from {url}")
+            return rates
+        except Exception as exc:
+            log(f"    own-site {code} FAILED: {exc}")
+            return []
+    return []
 
 
 # ──────────────────────────────────────────────────────────────

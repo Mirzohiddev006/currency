@@ -1,0 +1,233 @@
+﻿bank_code,bank,code,currency,buy_rate,sell_rate,cb_rate,source
+aab,Asia Alliance Bank,CHF,Valyuta Shveytsariya franki,14840.0,15540.0,,own-site+bank.uz
+aab,Asia Alliance Bank,EUR,EUR,13750.0,14000.0,,own-site+bank.uz
+aab,Asia Alliance Bank,GBP,Valyuta Angliya funt sterlingi,15720.0,16410.0,,own-site+bank.uz
+aab,Asia Alliance Bank,JPY,Valyuta Yaponiya iyenasi,66.0,76.0,,own-site+bank.uz
+aab,Asia Alliance Bank,RUB,RUB,157.0,167.0,,own-site+bank.uz
+aab,Asia Alliance Bank,USD,USD,11915.0,11975.0,,own-site+bank.uz
+agrobank,Agrobank,CHF,Valyuta Shveytsariya franki,14350.0,15650.0,,bank.uz
+agrobank,Agrobank,EUR,Valyuta Evro,13700.0,14200.0,,bank.uz
+agrobank,Agrobank,GBP,Valyuta Angliya funt sterlingi,15400.0,16500.0,,bank.uz
+agrobank,Agrobank,JPY,Valyuta Yaponiya iyenasi,65.0,85.0,,bank.uz
+agrobank,Agrobank,RUB,Valyuta Rossiya rubli,,180.0,,bank.uz
+agrobank,Agrobank,USD,Valyuta AQSH dollari,11890.0,11990.0,,bank.uz
+aloqabank,Aloqabank,CHF,Valyuta Shveytsariya franki,15000.0,16000.0,,own-site+bank.uz
+aloqabank,Aloqabank,EUR,EUR,13500.0,14500.0,,own-site+bank.uz
+aloqabank,Aloqabank,GBP,Valyuta Angliya funt sterlingi,15500.0,16500.0,,own-site+bank.uz
+aloqabank,Aloqabank,JPY,Valyuta Yaponiya iyenasi,70.0,100.0,,own-site+bank.uz
+aloqabank,Aloqabank,RUB,RUB,95.0,180.0,,own-site+bank.uz
+aloqabank,Aloqabank,USD,USD,11900.0,12000.0,,own-site+bank.uz
+anorbank,Anorbank,CHF,Valyuta Shveytsariya franki,14240.0,,,bank.uz
+anorbank,Anorbank,EUR,Valyuta Evro,13630.0,14150.0,,bank.uz
+anorbank,Anorbank,GBP,Valyuta Angliya funt sterlingi,15430.0,,,bank.uz
+anorbank,Anorbank,KZT,Valyuta Qozog'iston tengesi,16.0,27.0,,bank.uz
+anorbank,Anorbank,RUB,Valyuta Rossiya rubli,80.0,172.0,,bank.uz
+anorbank,Anorbank,USD,Valyuta AQSH dollari,11890.0,11960.0,,bank.uz
+apexbank,Apex Bank,EUR,Yevro,13000.0,14000.0,,own-site
+apexbank,Apex Bank,RUB,RUB,100.0,170.0,,own-site
+asakabank,Asaka Bank,CHF,Valyuta Shveytsariya franki,14700.0,15800.0,,bank.uz
+asakabank,Asaka Bank,EUR,Valyuta Evro,13300.0,14450.0,,bank.uz
+asakabank,Asaka Bank,GBP,Valyuta Angliya funt sterlingi,15750.0,16750.0,,bank.uz
+asakabank,Asaka Bank,RUB,Valyuta Rossiya rubli,135.0,190.0,,bank.uz
+asakabank,Asaka Bank,USD,Valyuta AQSH dollari,11890.0,11960.0,,bank.uz
+brb,BRB,CHF,Valyuta Shveytsariya franki,14900.0,15600.0,,bank.uz
+brb,BRB,EUR,Valyuta Evro,13600.0,14300.0,,bank.uz
+brb,BRB,GBP,Valyuta Angliya funt sterlingi,15800.0,16500.0,,bank.uz
+brb,BRB,JPY,Valyuta Yaponiya iyenasi,50.0,90.0,,bank.uz
+brb,BRB,RUB,Valyuta Rossiya rubli,140.0,171.0,,bank.uz
+brb,BRB,USD,Valyuta AQSH dollari,11920.0,12000.0,,bank.uz
+cbu,Central Bank,AED,BAA dirhami,,,3253.38,cbu-api
+cbu,Central Bank,AFN,Afg‘oniston afg‘onisi,,,186.97,cbu-api
+cbu,Central Bank,AMD,Armaniston drami,,,32.45,cbu-api
+cbu,Central Bank,ARS,Argentina pesosi,,,8.48,cbu-api
+cbu,Central Bank,AUD,Avstraliya dollari,,,8578.21,cbu-api
+cbu,Central Bank,AZN,Ozarbayjon manati,,,7028.84,cbu-api
+cbu,Central Bank,BDT,Bangladesh takasi,,,97.34,cbu-api
+cbu,Central Bank,BHD,Bahrayn dinori,,,31695.04,cbu-api
+cbu,Central Bank,BND,Bruney dollari,,,9351.98,cbu-api
+cbu,Central Bank,BRL,Braziliya reali,,,2372.3,cbu-api
+cbu,Central Bank,BYN,Belorus rubli,,,4325.28,cbu-api
+cbu,Central Bank,CAD,Kanada dollari,,,8646.81,cbu-api
+cbu,Central Bank,CHF,Shveytsariya franki,,,15241.11,cbu-api
+cbu,Central Bank,CNY,Xitoy yuani,,,1766.25,cbu-api
+cbu,Central Bank,CUP,Kuba pesosi,,,497.88,cbu-api
+cbu,Central Bank,CZK,Chexiya kronasi,,,573.18,cbu-api
+cbu,Central Bank,DKK,Daniya kronasi,,,1862.79,cbu-api
+cbu,Central Bank,DZD,Jazoir dinori,,,90.17,cbu-api
+cbu,Central Bank,EGP,Misr funti,,,229.48,cbu-api
+cbu,Central Bank,EUR,EVRO,,,13921.81,cbu-api
+cbu,Central Bank,GBP,Angliya funt sterlingi,,,16083.39,cbu-api
+cbu,Central Bank,GEL,Gruziya larisi,,,4490.43,cbu-api
+cbu,Central Bank,HKD,Gongkong dollari,,,1524.69,cbu-api
+cbu,Central Bank,HUF,Vengriya forinti,,,39.28,cbu-api
+cbu,Central Bank,IDR,Indoneziya rupiyasi,,,0.67,cbu-api
+cbu,Central Bank,ILS,Isroil shekeli,,,4243.11,cbu-api
+cbu,Central Bank,INR,Hindiston rupiyasi,,,125.78,cbu-api
+cbu,Central Bank,IQD,Iroq dinori,,,9.12,cbu-api
+cbu,Central Bank,IRR,Eron riali,,,0.01,cbu-api
+cbu,Central Bank,ISK,Islandiya kronasi,,,96.95,cbu-api
+cbu,Central Bank,JOD,Iordaniya dinori,,,16853.36,cbu-api
+cbu,Central Bank,JPY,Yaponiya iyenasi,,,74.94,cbu-api
+cbu,Central Bank,KGS,Qirg‘iz somi,,,136.6,cbu-api
+cbu,Central Bank,KHR,Kambodja riyeli,,,2.98,cbu-api
+cbu,Central Bank,KRW,Koreya Respublikasi voni,,,7.92,cbu-api
+cbu,Central Bank,KWD,Quvayt dinori,,,38959.99,cbu-api
+cbu,Central Bank,KZT,Qozog‘iston tengesi,,,24.44,cbu-api
+cbu,Central Bank,LAK,Laos kipisi,,,0.55,cbu-api
+cbu,Central Bank,LBP,Livan funti,,,0.13,cbu-api
+cbu,Central Bank,LYD,Liviya dinori,,,1881.23,cbu-api
+cbu,Central Bank,MAD,Marokash dirhami,,,1300.42,cbu-api
+cbu,Central Bank,MDL,Moldaviya leyi,,,692.7,cbu-api
+cbu,Central Bank,MMK,Myanma kyati,,,5.69,cbu-api
+cbu,Central Bank,MNT,Mongoliya tugriki,,,3.34,cbu-api
+cbu,Central Bank,MXN,Meksika pesosi,,,689.54,cbu-api
+cbu,Central Bank,MYR,Malayziya ringgiti,,,3013.63,cbu-api
+cbu,Central Bank,NOK,Norvegiya kronasi,,,1292.19,cbu-api
+cbu,Central Bank,NZD,Yangi Zelandiya dollari,,,7112.06,cbu-api
+cbu,Central Bank,OMR,Ummon riali,,,31036.44,cbu-api
+cbu,Central Bank,PHP,Filippin pesosi,,,193.57,cbu-api
+cbu,Central Bank,PKR,Pokiston rupiyasi,,,42.92,cbu-api
+cbu,Central Bank,PLN,Polsha zlotiysi,,,3287.22,cbu-api
+cbu,Central Bank,QAR,Qatar riali,,,3277.93,cbu-api
+cbu,Central Bank,RON,Ruminiya leyi,,,2649.8,cbu-api
+cbu,Central Bank,RSD,Serbiya dinori,,,118.58,cbu-api
+cbu,Central Bank,RUB,Rossiya rubli,,,166.28,cbu-api
+cbu,Central Bank,SAR,Saudiya Arabistoni riali,,,3184.03,cbu-api
+cbu,Central Bank,SDG,Sudan funti,,,19.91,cbu-api
+cbu,Central Bank,SEK,Shvetsiya kronasi,,,1288.47,cbu-api
+cbu,Central Bank,SGD,Singapur dollari,,,9351.98,cbu-api
+cbu,Central Bank,SYP,Suriya funti,,,103.45,cbu-api
+cbu,Central Bank,THB,Tailand bati,,,366.76,cbu-api
+cbu,Central Bank,TJS,Tojikiston somonisi,,,1294.59,cbu-api
+cbu,Central Bank,TMT,Turkmaniston manati,,,3414.01,cbu-api
+cbu,Central Bank,TND,Tunis dinori,,,4100.42,cbu-api
+cbu,Central Bank,TRY,Turkiya lirasi,,,260.26,cbu-api
+cbu,Central Bank,UAH,Ukraina grivnasi,,,269.68,cbu-api
+cbu,Central Bank,USD,AQSH dollari,,,11949.03,cbu-api
+cbu,Central Bank,UYU,Urugvay pesosi,,,297.61,cbu-api
+cbu,Central Bank,VES,Venesuela bolivari,,,21.58,cbu-api
+cbu,Central Bank,VND,Vetnam dongi,,,0.45,cbu-api
+cbu,Central Bank,XDR,SDR,,,16355.27,cbu-api
+cbu,Central Bank,YER,Yaman riali,,,50.09,cbu-api
+cbu,Central Bank,ZAR,Janubiy Afrika randi,,,735.56,cbu-api
+davrbank,Davr Bank,CHF,Shveytsariya franki,14400.0,16400.0,,own-site
+davrbank,Davr Bank,EUR,Yevro,13400.0,14100.0,,own-site
+davrbank,Davr Bank,GBP,Funt sterling,14450.0,16450.0,,own-site
+davrbank,Davr Bank,JPY,Yapon yenasi,70.0,95.0,,own-site
+davrbank,Davr Bank,USD,AQSH dollari,11890.0,11970.0,,own-site
+garantbank,Garant Bank,CHF,Valyuta Shveytsariya franki,14000.0,16800.0,,bank.uz
+garantbank,Garant Bank,EUR,Valyuta Evro,13000.0,15500.0,,bank.uz
+garantbank,Garant Bank,GBP,Valyuta Angliya funt sterlingi,14800.0,17700.0,,bank.uz
+garantbank,Garant Bank,JPY,Valyuta Yaponiya iyenasi,70.0,120.0,,bank.uz
+garantbank,Garant Bank,RUB,Valyuta Rossiya rubli,100.0,180.0,,bank.uz
+garantbank,Garant Bank,USD,Valyuta AQSH dollari,11900.0,12000.0,,bank.uz
+hamkorbank,Hamkorbank,CHF,Valyuta Shveytsariya franki,14500.0,16000.0,,bank.uz
+hamkorbank,Hamkorbank,EUR,Valyuta Evro,13200.0,14000.0,,bank.uz
+hamkorbank,Hamkorbank,GBP,Valyuta Angliya funt sterlingi,15300.0,16900.0,,bank.uz
+hamkorbank,Hamkorbank,JPY,Valyuta Yaponiya iyenasi,71.0,79.0,,bank.uz
+hamkorbank,Hamkorbank,RUB,Valyuta Rossiya rubli,148.0,168.0,,bank.uz
+hamkorbank,Hamkorbank,USD,Valyuta AQSH dollari,11890.0,11990.0,,bank.uz
+hayotbank,Hayot Bank,CHF,Valyuta Shveytsariya franki,14700.0,15500.0,,bank.uz
+hayotbank,Hayot Bank,EUR,Valyuta Evro,13650.0,14140.0,,bank.uz
+hayotbank,Hayot Bank,GBP,Valyuta Angliya funt sterlingi,15400.0,16600.0,,bank.uz
+hayotbank,Hayot Bank,JPY,Valyuta Yaponiya iyenasi,40.0,75.0,,bank.uz
+hayotbank,Hayot Bank,KZT,Valyuta Qozog'iston tengesi,23.0,25.0,,bank.uz
+hayotbank,Hayot Bank,RUB,Valyuta Rossiya rubli,138.0,168.0,,bank.uz
+hayotbank,Hayot Bank,USD,Valyuta AQSH dollari,11900.0,11970.0,,bank.uz
+infinbank,Infinbank,CHF,Valyuta Shveytsariya franki,14000.0,16000.0,,bank.uz
+infinbank,Infinbank,EUR,Valyuta Evro,13000.0,15000.0,,bank.uz
+infinbank,Infinbank,GBP,Valyuta Angliya funt sterlingi,15000.0,17000.0,,bank.uz
+infinbank,Infinbank,JPY,Valyuta Yaponiya iyenasi,50.0,100.0,,bank.uz
+infinbank,Infinbank,RUB,Valyuta Rossiya rubli,155.0,170.0,,bank.uz
+infinbank,Infinbank,USD,Valyuta AQSH dollari,11900.0,11980.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,CHF,Valyuta Shveytsariya franki,14640.0,15730.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,EUR,Valyuta Evro,13440.0,14370.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,GBP,Valyuta Angliya funt sterlingi,15500.0,16600.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,JPY,Valyuta Yaponiya iyenasi,57.0,78.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,RUB,Valyuta Rossiya rubli,145.0,173.0,,bank.uz
+ipakyulibank,Ipak Yuli Bank,USD,Valyuta AQSH dollari,11900.0,11990.0,,bank.uz
+ipotekabank,Ipoteka Bank,EUR,EUR,13000.0,14050.0,,own-site+bank.uz
+ipotekabank,Ipoteka Bank,GBP,Valyuta Angliya funt sterlingi,13850.0,17300.0,,own-site+bank.uz
+ipotekabank,Ipoteka Bank,JPY,Valyuta Yaponiya iyenasi,65.0,81.0,,own-site+bank.uz
+ipotekabank,Ipoteka Bank,RUB,RUB,100.0,172.0,,own-site+bank.uz
+ipotekabank,Ipoteka Bank,USD,USD,11885.0,11995.0,,own-site+bank.uz
+kapitalbank,Kapitalbank,CHF,Valyuta Shveytsariya franki,14660.0,15780.0,,bank.uz
+kapitalbank,Kapitalbank,EUR,Valyuta Evro,13460.0,14070.0,,bank.uz
+kapitalbank,Kapitalbank,GBP,Valyuta Angliya funt sterlingi,15500.0,16680.0,,bank.uz
+kapitalbank,Kapitalbank,JPY,Valyuta Yaponiya iyenasi,63.0,83.0,,bank.uz
+kapitalbank,Kapitalbank,KZT,Valyuta Qozog'iston tengesi,22.0,25.0,,bank.uz
+kapitalbank,Kapitalbank,RUB,Valyuta Rossiya rubli,156.0,169.0,,bank.uz
+kapitalbank,Kapitalbank,USD,Valyuta AQSH dollari,11910.0,11990.0,,bank.uz
+mkbank,MKBank,CHF,Valyuta Shveytsariya franki,14800.0,15800.0,,own-site+bank.uz
+mkbank,MKBank,EUR,EUR,13500.0,14000.0,,own-site+bank.uz
+mkbank,MKBank,GBP,Valyuta Angliya funt sterlingi,15700.0,16700.0,,own-site+bank.uz
+mkbank,MKBank,JPY,Valyuta Yaponiya iyenasi,50.0,100.0,,own-site+bank.uz
+mkbank,MKBank,USD,USD,11940.0,12000.0,,own-site+bank.uz
+nbu,National Bank of Uzbekistan,CHF,Valyuta Shveytsariya franki,14920.0,15520.0,,bank.uz
+nbu,National Bank of Uzbekistan,EUR,Valyuta Evro,13770.0,13980.0,,bank.uz
+nbu,National Bank of Uzbekistan,GBP,Valyuta Angliya funt sterlingi,15800.0,16400.0,,bank.uz
+nbu,National Bank of Uzbekistan,JPY,Valyuta Yaponiya iyenasi,65.0,80.0,,bank.uz
+nbu,National Bank of Uzbekistan,KZT,Valyuta Qozog'iston tengesi,16.0,27.0,,bank.uz
+nbu,National Bank of Uzbekistan,RUB,Valyuta Rossiya rubli,150.0,180.0,,bank.uz
+nbu,National Bank of Uzbekistan,USD,Valyuta AQSH dollari,11920.0,12000.0,,bank.uz
+octobank,Octobank,CHF,Valyuta Shveytsariya franki,12000.0,18500.0,,bank.uz
+octobank,Octobank,EUR,Valyuta Evro,13650.0,13950.0,,bank.uz
+octobank,Octobank,GBP,Valyuta Angliya funt sterlingi,13500.0,18800.0,,bank.uz
+octobank,Octobank,JPY,Valyuta Yaponiya iyenasi,40.0,115.0,,bank.uz
+octobank,Octobank,RUB,Valyuta Rossiya rubli,158.0,167.0,,bank.uz
+octobank,Octobank,USD,Valyuta AQSH dollari,11890.0,11960.0,,bank.uz
+ofb,Orient Finans Bank,CHF,Valyuta Shveytsariya franki,13300.0,16800.0,,bank.uz
+ofb,Orient Finans Bank,EUR,Valyuta Evro,13700.0,15000.0,,bank.uz
+ofb,Orient Finans Bank,GBP,Valyuta Angliya funt sterlingi,14800.0,18000.0,,bank.uz
+ofb,Orient Finans Bank,JPY,Valyuta Yaponiya iyenasi,60.0,100.0,,bank.uz
+ofb,Orient Finans Bank,RUB,Valyuta Rossiya rubli,90.0,172.0,,bank.uz
+ofb,Orient Finans Bank,USD,Valyuta AQSH dollari,11890.0,11990.0,,bank.uz
+poytaxtbank,Poytaxt Bank,CHF,Valyuta Shveytsariya franki,13300.0,16300.0,,bank.uz
+poytaxtbank,Poytaxt Bank,EUR,Valyuta Evro,13100.0,14500.0,,bank.uz
+poytaxtbank,Poytaxt Bank,GBP,Valyuta Angliya funt sterlingi,14500.0,17100.0,,bank.uz
+poytaxtbank,Poytaxt Bank,JPY,Valyuta Yaponiya iyenasi,50.0,78.0,,bank.uz
+poytaxtbank,Poytaxt Bank,RUB,Valyuta Rossiya rubli,150.0,175.0,,bank.uz
+poytaxtbank,Poytaxt Bank,USD,Valyuta AQSH dollari,11910.0,11990.0,,bank.uz
+saderatbank,Saderat Bank,EUR,Valyuta Evro,13000.0,15500.0,,bank.uz
+saderatbank,Saderat Bank,USD,Valyuta AQSH dollari,11890.0,11960.0,,bank.uz
+tbcbank,TBC Bank Uzbekistan,EUR,EUR,13500.0,14400.0,,own-site
+tbcbank,TBC Bank Uzbekistan,USD,USD,11900.0,12000.0,,own-site
+tengebank,Tenge Bank,EUR,Valyuta Evro,13560.0,14360.0,,bank.uz
+tengebank,Tenge Bank,GBP,Valyuta Angliya funt sterlingi,15650.0,16650.0,,bank.uz
+tengebank,Tenge Bank,KZT,Valyuta Qozog'iston tengesi,23.0,25.0,,bank.uz
+tengebank,Tenge Bank,RUB,Valyuta Rossiya rubli,140.0,172.0,,bank.uz
+tengebank,Tenge Bank,USD,Valyuta AQSH dollari,11860.0,11960.0,,bank.uz
+trustbank,Trustbank,CHF,Valyuta Shveytsariya franki,14950.0,15550.0,,own-site+bank.uz
+trustbank,Trustbank,EUR,EUR,13400.0,14000.0,,own-site+bank.uz
+trustbank,Trustbank,GBP,Valyuta Angliya funt sterlingi,15750.0,16400.0,,own-site+bank.uz
+trustbank,Trustbank,JPY,Valyuta Yaponiya iyenasi,60.0,100.0,,own-site+bank.uz
+trustbank,Trustbank,RUB,RUB,110.0,172.0,,own-site+bank.uz
+trustbank,Trustbank,USD,USD,11915.0,12005.0,,own-site+bank.uz
+turonbank,Turonbank,CHF,Valyuta Shveytsariya franki,14000.0,16500.0,,bank.uz
+turonbank,Turonbank,EUR,Valyuta Evro,13000.0,14500.0,,bank.uz
+turonbank,Turonbank,GBP,Valyuta Angliya funt sterlingi,15000.0,17500.0,,bank.uz
+turonbank,Turonbank,JPY,Valyuta Yaponiya iyenasi,50.0,120.0,,bank.uz
+turonbank,Turonbank,KZT,Valyuta Qozog'iston tengesi,15.0,30.0,,bank.uz
+turonbank,Turonbank,RUB,Valyuta Rossiya rubli,100.0,175.0,,bank.uz
+turonbank,Turonbank,USD,Valyuta AQSH dollari,11930.0,11980.0,,bank.uz
+universalbank,Universal Bank,EUR,Valyuta Evro,13000.0,15000.0,,bank.uz
+universalbank,Universal Bank,GBP,Valyuta Angliya funt sterlingi,15200.0,18000.0,,bank.uz
+universalbank,Universal Bank,JPY,Valyuta Yaponiya iyenasi,70.0,100.0,,bank.uz
+universalbank,Universal Bank,RUB,Valyuta Rossiya rubli,,170.0,,bank.uz
+universalbank,Universal Bank,USD,Valyuta AQSH dollari,11920.0,12005.0,,bank.uz
+uzkdbbank,KDB Bank Uzbekistan,EUR,Valyuta Evro,13500.0,14400.0,,bank.uz
+uzkdbbank,KDB Bank Uzbekistan,USD,Valyuta AQSH dollari,11885.0,12005.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,CHF,Valyuta Shveytsariya franki,14900.0,15500.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,EUR,Valyuta Evro,13600.0,14200.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,GBP,Valyuta Angliya funt sterlingi,15800.0,16400.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,JPY,Valyuta Yaponiya iyenasi,64.0,84.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,RUB,Valyuta Rossiya rubli,105.0,168.0,,bank.uz
+uzpromstroybank,Uzsanoatqurilishbank,USD,Valyuta AQSH dollari,11890.0,12000.0,,bank.uz
+xalqbank,Xalq Bank,CHF,Valyuta Shveytsariya franki,12000.0,18000.0,,bank.uz
+xalqbank,Xalq Bank,EUR,Valyuta Evro,13000.0,14050.0,,bank.uz
+xalqbank,Xalq Bank,GBP,Valyuta Angliya funt sterlingi,13000.0,19000.0,,bank.uz
+xalqbank,Xalq Bank,JPY,Valyuta Yaponiya iyenasi,50.0,120.0,,bank.uz
+xalqbank,Xalq Bank,KZT,Valyuta Qozog'iston tengesi,15.0,25.0,,bank.uz
+xalqbank,Xalq Bank,USD,Valyuta AQSH dollari,11900.0,11960.0,,bank.uz
+ziraatbank,Ziraat Bank Uzbekistan,EUR,Valyuta Evro,13570.0,14270.0,,bank.uz
+ziraatbank,Ziraat Bank Uzbekistan,USD,Valyuta AQSH dollari,11860.0,11970.0,,bank.uz
