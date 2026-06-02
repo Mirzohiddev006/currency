@@ -77,3 +77,39 @@ safe to add incrementally.
   the Node app's behaviour, so re-running the same day is safe (idempotent).
 - Site HTML can change over time; if a bank suddenly returns 0 rates, its parser
   selector likely needs updating. Run `--dry-run` to inspect.
+
+## Bot bilan bog'lanish (MUHIM — kurslar botda chiqishi uchun)
+
+Bot/backend kurslarni **bazadan** o'qiydi (`getRatesOverview`). Bot scraper bilan
+to'g'ridan-to'g'ri gaplashmaydi — ular faqat **bir xil Postgres** orqali bog'lanadi.
+
+Shuning uchun kurslar botda chiqishi uchun scraper **aynan botning `DATABASE_URL`i**
+bilan ishlashi shart:
+
+```bash
+# Render Postgres'ning manzili bilan (External Database URL):
+DATABASE_URL="postgres://currency:...@...frankfurt-postgres.render.com/currency_tracker" \
+  python scraper.py
+```
+
+Bir marta ishlatib tekshiring — keyin botda /start → kurslar chiqadi.
+
+### Avtomatik ishlashi (Render Cron Job)
+
+Botning bazasi doim yangi turishi uchun scraperni jadval bo'yicha ishlating:
+
+1. Render → New → **Cron Job**, shu reponi tanlang.
+2. Root Directory: `scraper`
+3. Build Command: `pip install -r requirements.txt`
+4. Command: `python scraper.py`
+5. Schedule: `0 * * * *` (har soatda) yoki `0 9,16 * * *` (09:00 va 16:00).
+6. Environment → `DATABASE_URL` = Postgres'ning **Internal Database URL**'i
+   (web service bilan bir xil baza).
+
+Shundan keyin scraper har safar shu bazaga yozadi va bot avtomatik yangilanadi.
+Hech qanday kod o'zgartirish kerak emas.
+
+> Eslatma: backend ichidagi eski Node-scraper ham shu bazaga yozadi. Ikkalasi
+> birga ishlasa zarari yo'q (idempotent — har run o'sha kungi qatorlarni
+> almashtiradi). Agar faqat Python-scraper ishlashini xohlasangiz, Node
+> scheduler'ini o'chirib qo'yish mumkin (so'rang — qilib beraman).
