@@ -27,6 +27,10 @@ const app = express();
 // ERR_ERL_UNEXPECTED_X_FORWARDED_FOR and client IPs are wrong.
 app.set('trust proxy', 1);
 
+// ETag'ni o'chiramiz — aks holda API GET javoblari 304 qaytaradi va
+// frontend axios (validateStatus 200-299) buni xato deb qabul qiladi.
+app.set('etag', false);
+
 // ── Security Middlewares ─────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: env.NODE_ENV === 'production' ? undefined : false,
@@ -82,6 +86,12 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: 'Currency Tracker API',
 }));
 app.get('/api/docs.json', (_req, res) => res.json(swaggerSpec));
+
+// API javoblari brauzerda keshlanmasin (304 oldini olish uchun).
+app.use('/api', (_req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 
 app.use('/api', routes);
 

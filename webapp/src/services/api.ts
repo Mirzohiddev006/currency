@@ -7,6 +7,8 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // 304 (Not Modified) ham muvaffaqiyat deb hisoblansin (xato emas).
+  validateStatus: (status) => (status >= 200 && status < 300) || status === 304,
 });
 
 apiClient.interceptors.response.use(
