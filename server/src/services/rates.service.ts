@@ -694,7 +694,9 @@ export class RatesService {
         throw error;
       }
 
-      const latestRates = await ratesRepository.getLatestRatesForBank(cbuBank.id);
+      const latestRates = await ratesRepository.getLatestRatesForBank(
+        cbuBank.id,
+      );
       const fallbackSnapshot = latestRates
         .filter((rate) => rate.cbRate !== null)
         .map((rate) => ({
