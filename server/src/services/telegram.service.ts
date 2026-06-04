@@ -345,6 +345,10 @@ function registerHandlers(botInstance: Telegraf): void {
   // /start va kontakt ulashishdan tashqari barcha interaktsiyalar
   // telefon raqami ulashilgan bo'lishini talab qiladi.
   botInstance.use(async (ctx, next) => {
+    // Inline query telefon darvozasidan o'tkazilmaydi (boshqa chatlarda ishlaydi).
+    if ('inline_query' in ctx.update) {
+      return next();
+    }
     const msg = ctx.message;
     const isStart =
       !!msg && 'text' in msg && typeof msg.text === 'string' && msg.text.startsWith('/start');
@@ -389,7 +393,7 @@ function registerHandlers(botInstance: Telegraf): void {
       }
     );
 
-    await sendOverview(ctx);
+    await sendTopRates(ctx, 'USD');
 
     if (isNewUser) {
       void maybeRefreshForNewUser();
@@ -423,7 +427,7 @@ function registerHandlers(botInstance: Telegraf): void {
         `Endi «${VIEW_RATES_BUTTON}» tugmasi orqali kurslarni ko'rishingiz mumkin.`,
       Markup.keyboard([[VIEW_RATES_BUTTON]]).resize()
     );
-    await sendOverview(ctx);
+    await sendTopRates(ctx, 'USD');
   });
 
   botInstance.command('banks', async (ctx) => {
@@ -451,7 +455,7 @@ function registerHandlers(botInstance: Telegraf): void {
 
   botInstance.hears(VIEW_RATES_BUTTON, async (ctx) => {
     await trackUser(ctx, 'view_rates_button');
-    await sendOverview(ctx);
+    await sendTopRates(ctx, 'USD');
   });
 
   for (const currency of CURRENCIES) {
@@ -495,12 +499,44 @@ function registerHandlers(botInstance: Telegraf): void {
     await sendBankBoard(ctx);
   });
 
+  botInstance.action(/^top:([A-Z]{3})$/, async (ctx) => {
+    const currency = ctx.match[1];
+    await trackUser(ctx, `top:${currency}`);
+    await sendTopRates(ctx, currency);
+  });
+
+  botInstance.action('calc', async (ctx) => {
+    await trackUser(ctx, 'calc:open');
+    await safeAnswerCbQuery(ctx);
+    await ctx.reply(CALC_HINT, { parse_mode: 'HTML' });
+  });
+
+  botInstance.action('digest:toggle', async (ctx) => {
+    if (!ctx.from) return;
+    const enabled = !(await getDigestState(ctx));
+    try {
+      await userRepository.setDailyDigest(BigInt(ctx.from.id), enabled);
+    } catch (error) {
+      logger.error('setDailyDigest error:', error);
+    }
+    await trackUser(ctx, `digest:${enabled ? 'on' : 'off'}`);
+    try {
+      await ctx.answerCbQuery(
+        enabled ? '🔔 Kunlik xabar yoqildi' : "🔕 Kunlik xabar o'chirildi"
+      );
+    } catch {
+      // ignore
+    }
+    await sendTopRates(ctx, 'USD');
+  });
+
   botInstance.action('noop', async (ctx) => {
     await safeAnswerCbQuery(ctx);
   });
 
   botInstance.on('text', async (ctx) => {
-    const text = ctx.message.text.toUpperCase().trim();
+    const raw = ctx.message.text.trim();
+    const text = raw.toUpperCase();
     if (CURRENCIES.includes(text)) {
       await trackUser(ctx, text);
       await sendCurrencyDetails(ctx, text);
@@ -510,8 +546,221 @@ function registerHandlers(botInstance: Telegraf): void {
     if (text === '/BANKS' || text === 'BANKLAR') {
       await trackUser(ctx, text);
       await sendBankBoard(ctx);
+      return;
+    }
+
+    // Kalkulyator: "100 USD", "100$", "1000000 som" ...
+    const calc = parseCalcQuery(raw);
+    if (calc) {
+      await trackUser(ctx, 'calc');
+      await handleCalc(ctx, calc.amount, calc.code);
     }
   });
+
+  // ── Inline rejim — istalgan chatda @bot USD ───────────────
+  botInstance.on('inline_query', async (ctx) => {
+    try {
+      const board = await ratesService.getBankBoard('USD');
+      const text = formatTopRatesMessage(board, 'USD');
+      const cbRate = board.banks.find((b) => b.cbRate !== null)?.cbRate ?? null;
+      await ctx.answerInlineQuery(
+        [
+          {
+            type: 'article',
+            id: 'usd-top',
+            title: '💵 USD kursi — eng yaxshi banklar',
+            description: cbRate
+              ? `Markaziy bank: ${formatRate(cbRate)} so'm`
+              : 'Dollar kursi',
+            input_message_content: {
+              message_text: text,
+              parse_mode: 'HTML',
+            },
+          },
+        ],
+        { cache_time: 60 }
+      );
+    } catch (error) {
+      logger.error('inline_query error:', error);
+    }
+  });
+}
+
+// ── Top kurslar (USD asosiy) + kalkulyator ────────────────
+const RATE_CURRENCIES = ['USD', 'EUR', 'RUB'];
+
+const CALC_SYMBOLS: Record<string, string> = {
+  '$': 'USD',
+  '€': 'EUR',
+  '₽': 'RUB',
+};
+
+const CALC_HINT =
+  '🧮 <b>Kalkulyator</b>\n\n' +
+  'Summa va valyutani yozing, men hisoblab beraman:\n' +
+  '• <code>100 USD</code> yoki <code>100$</code>\n' +
+  '• <code>100 EUR</code>, <code>5000 RUB</code>\n' +
+  "• <code>1000000 som</code> → dollar/yevro/rublda";
+
+function topRatesKeyboard(currency: string, digestOn: boolean) {
+  const curRow = RATE_CURRENCIES.map((c) =>
+    Markup.button.callback(
+      c === currency ? `• ${flag(c)} ${c}` : `${flag(c)} ${c}`,
+      `top:${c}`
+    )
+  );
+  return Markup.inlineKeyboard([
+    curRow,
+    [
+      Markup.button.callback('🧮 Kalkulyator', 'calc'),
+      Markup.button.callback(
+        digestOn ? '🔔 Kunlik xabar: ON' : '🔕 Kunlik xabar: OFF',
+        'digest:toggle'
+      ),
+    ],
+    [
+      Markup.button.callback('🏦 Banklar', 'menu:banks'),
+      Markup.button.callback('🏛 Markaziy bank', 'menu:overview'),
+    ],
+  ]);
+}
+
+function formatTopRatesMessage(board: BankBoard, currency: string): string {
+  const reporting = board.banks.filter((b) => b.hasRate);
+  const cbRate = board.banks.find((b) => b.cbRate !== null)?.cbRate ?? null;
+
+  const bestBuy = reporting
+    .filter((b) => b.buyRate !== null)
+    .sort((a, b) => (b.buyRate as number) - (a.buyRate as number))
+    .slice(0, 3);
+  const bestSell = reporting
+    .filter((b) => b.sellRate !== null)
+    .sort((a, b) => (a.sellRate as number) - (b.sellRate as number))
+    .slice(0, 3);
+
+  const buyLines = bestBuy.length
+    ? bestBuy
+        .map((b, i) => `${i + 1}. <b>${b.bank.nameUz}</b> — ${formatRate(b.buyRate)} so'm`)
+        .join('\n')
+    : "Hozircha ma'lumot yo'q";
+  const sellLines = bestSell.length
+    ? bestSell
+        .map((b, i) => `${i + 1}. <b>${b.bank.nameUz}</b> — ${formatRate(b.sellRate)} so'm`)
+        .join('\n')
+    : "Hozircha ma'lumot yo'q";
+
+  return (
+    `${flag(currency)} <b>${currency} kursi</b>\n` +
+    `📅 ${board.date || ''}\n` +
+    `🏛 Markaziy bank: <b>${formatRate(cbRate)}</b> so'm\n\n` +
+    `💰 <b>Eng yaxshi sotib olish</b> (siz sotsangiz):\n${buyLines}\n\n` +
+    `🛒 <b>Eng yaxshi sotish</b> (siz olsangiz):\n${sellLines}\n\n` +
+    `Qamrov: ${board.reportingBanks}/${board.totalBanks} bank`
+  );
+}
+
+async function getDigestState(ctx: Context): Promise<boolean> {
+  if (!ctx.from) return true;
+  try {
+    const user = await userRepository.findByTelegramId(BigInt(ctx.from.id));
+    return user?.dailyDigest ?? true;
+  } catch {
+    return true;
+  }
+}
+
+async function sendTopRates(ctx: Context, currency = 'USD'): Promise<void> {
+  try {
+    const [board, digestOn] = await Promise.all([
+      ratesService.getBankBoard(currency),
+      getDigestState(ctx),
+    ]);
+    await replyOrEdit(
+      ctx,
+      formatTopRatesMessage(board, currency),
+      topRatesKeyboard(currency, digestOn)
+    );
+  } catch (error) {
+    logger.error('sendTopRates error:', error);
+    await replyOrEdit(
+      ctx,
+      "Kurslarni olishda xatolik yuz berdi. Birozdan keyin qayta urinib ko'ring."
+    );
+  }
+}
+
+function parseCalcQuery(raw: string): { amount: number; code: string } | null {
+  const text = raw.trim();
+  const match = text.match(/^([\d  .,]+)\s*([a-z$€₽']*)\s*$/i);
+  if (!match) return null;
+
+  let numRaw = match[1].replace(/[\s ]/g, '');
+  if (numRaw.includes(',') && numRaw.includes('.')) {
+    numRaw = numRaw.replace(/,/g, '');
+  } else {
+    numRaw = numRaw.replace(',', '.');
+  }
+  const amount = Number.parseFloat(numRaw);
+  if (!Number.isFinite(amount) || amount <= 0) return null;
+
+  let token = (match[2] || '').trim();
+  if (CALC_SYMBOLS[token]) token = CALC_SYMBOLS[token];
+  token = token.toUpperCase().replace(/'/g, '');
+
+  if (token === '' || ['SUM', 'SOM', 'UZS', 'СУМ'].includes(token)) {
+    return { amount, code: 'UZS' };
+  }
+  if (token === 'RUBL' || token === 'РУБ') token = 'RUB';
+  if (CURRENCIES.includes(token)) return { amount, code: token };
+  return null;
+}
+
+async function handleCalc(ctx: Context, amount: number, code: string): Promise<void> {
+  try {
+    if (code === 'UZS') {
+      const lines: string[] = [];
+      for (const cur of RATE_CURRENCIES) {
+        const details = await ratesService.getCurrencyDetails(cur);
+        const cb = details.summary?.cbRate ?? null;
+        if (cb) {
+          const converted = (amount / cb).toLocaleString('uz-UZ', {
+            maximumFractionDigits: 2,
+          });
+          lines.push(`${flag(cur)} <b>${converted} ${cur}</b>`);
+        }
+      }
+      await ctx.reply(
+        `🧮 <b>${formatRate(amount)} so'm</b> =\n\n${lines.join('\n')}\n\n` +
+          `<i>Markaziy bank rasmiy kursi bo'yicha.</i>`,
+        { parse_mode: 'HTML' }
+      );
+      return;
+    }
+
+    const details = await ratesService.getCurrencyDetails(code);
+    const cb = details.summary?.cbRate ?? null;
+    const bestBuy = details.summary?.bestBuy ?? null;
+    const bestSell = details.summary?.bestSell ?? null;
+
+    const parts: string[] = [];
+    if (cb) parts.push(`🏛 Markaziy bank: <b>${formatRate(amount * cb)}</b> so'm`);
+    if (bestSell) parts.push(`🛒 Bankdan olsangiz: <b>${formatRate(amount * bestSell)}</b> so'm`);
+    if (bestBuy) parts.push(`💰 Bankka sotsangiz: <b>${formatRate(amount * bestBuy)}</b> so'm`);
+
+    if (parts.length === 0) {
+      await ctx.reply(`${code} uchun hozircha kurs ma'lumoti yo'q.`, { parse_mode: 'HTML' });
+      return;
+    }
+
+    const amountStr = amount.toLocaleString('uz-UZ', { maximumFractionDigits: 2 });
+    await ctx.reply(
+      `🧮 <b>${amountStr} ${code}</b> ${flag(code)} =\n\n${parts.join('\n')}`,
+      { parse_mode: 'HTML' }
+    );
+  } catch (error) {
+    logger.error('handleCalc error:', error);
+    await ctx.reply('Hisoblashda xatolik yuz berdi.');
+  }
 }
 
 async function sendOverview(ctx: Context): Promise<void> {
@@ -624,7 +873,7 @@ export async function notifyUsersAboutRates(): Promise<void> {
   }
 
   const botInstance = getBot();
-  const users = await userRepository.getActiveUsers();
+  const users = await userRepository.getDigestSubscribers();
 
   let board: BankBoard;
   try {

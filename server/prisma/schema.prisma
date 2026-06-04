@@ -30,6 +30,7 @@ model TelegramUser {
   lastName     String?  @map("last_name")
   phone        String?
   isActive     Boolean  @default(true) @map("is_active")
+  dailyDigest  Boolean  @default(true) @map("daily_digest")
   language     String   @default("uz")
   subscribedAt DateTime @default(now()) @map("subscribed_at")
   lastActiveAt DateTime @default(now()) @map("last_active_at")

@@ -67,6 +67,19 @@ export class UserRepository {
     });
   }
 
+  async setDailyDigest(telegramId: bigint, dailyDigest: boolean) {
+    return prisma.telegramUser.update({
+      where: { telegramId },
+      data: { dailyDigest, lastActiveAt: new Date() },
+    });
+  }
+
+  async getDigestSubscribers() {
+    return prisma.telegramUser.findMany({
+      where: { isActive: true, dailyDigest: true },
+    });
+  }
+
   async findByTelegramId(telegramId: bigint) {
     return prisma.telegramUser.findUnique({ where: { telegramId } });
   }
