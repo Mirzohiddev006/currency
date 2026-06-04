@@ -128,6 +128,9 @@ router.post("/bot/webhook", (req, res) => {
 
   try {
     const bot = getBot();
+    logger.info("Telegram webhook received");
+    // Log size only to avoid huge payloads in logs
+    logger.debug(`Webhook payload keys: ${Object.keys(req.body || {}).length}`);
     bot.handleUpdate(req.body);
     return res.sendStatus(200);
   } catch {
