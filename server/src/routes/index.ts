@@ -20,6 +20,7 @@ import {
   manualBankRefreshHandler,
 } from "../controllers/rates.controller";
 import { asyncHandler } from "../lib/async-handler";
+import { logger } from "../config/logger";
 import { authMiddleware } from "../middleware/auth";
 import { validate } from "../middleware/validate";
 import { getBot, isTelegramBotConfigured } from "../services/telegram.service";
