@@ -142,10 +142,25 @@ export class AdminService {
     return ratesRepository.getScrapeLogs(limit);
   }
 
-  async broadcast(text: string, imageUrl?: string): Promise<BroadcastResult> {
+  async broadcast(
+    text: string,
+    media?: {
+      imageUrl?: string;
+      fileBase64?: string;
+      fileName?: string;
+      mimeType?: string;
+    }
+  ): Promise<BroadcastResult> {
     const cleanImage =
-      imageUrl && imageUrl.trim().length > 0 ? imageUrl.trim() : undefined;
-    return broadcastToUsers(text, cleanImage);
+      media?.imageUrl && media.imageUrl.trim().length > 0
+        ? media.imageUrl.trim()
+        : undefined;
+    return broadcastToUsers(text, {
+      imageUrl: cleanImage,
+      fileBase64: media?.fileBase64,
+      fileName: media?.fileName,
+      mimeType: media?.mimeType,
+    });
   }
 }
 

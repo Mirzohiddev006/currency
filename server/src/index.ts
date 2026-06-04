@@ -69,7 +69,7 @@ app.use('/api/', apiLimiter);
 app.use('/api/auth/login', authLimiter);
 
 // ── Body Parser ──────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ── HTTP Logging ─────────────────────────────────────────

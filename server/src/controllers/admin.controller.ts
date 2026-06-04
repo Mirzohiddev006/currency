@@ -40,7 +40,18 @@ export async function getAnalytics(req: Request, res: Response) {
 }
 
 export async function broadcast(req: Request, res: Response) {
-  const { text, imageUrl } = req.body as { text?: string; imageUrl?: string };
-  const result = await adminService.broadcast(text || '', imageUrl);
+  const { text, imageUrl, fileBase64, fileName, mimeType } = req.body as {
+    text?: string;
+    imageUrl?: string;
+    fileBase64?: string;
+    fileName?: string;
+    mimeType?: string;
+  };
+  const result = await adminService.broadcast(text || '', {
+    imageUrl,
+    fileBase64,
+    fileName,
+    mimeType,
+  });
   return res.json({ success: true, data: result });
 }

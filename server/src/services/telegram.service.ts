@@ -18,11 +18,20 @@ const FLAGS: Record<string, string> = {
   CNY: '🇨🇳', JPY: '🇯🇵', KZT: '🇰🇿', TRY: '🇹🇷',
 };
 
+const CURRENCY_NAMES: Record<string, string> = {
+  USD: 'Dollar', EUR: 'Yevro', RUB: 'Rubl', GBP: 'Funt',
+  CNY: 'Yuan', JPY: 'Yena', KZT: 'Tenge', TRY: 'Lira',
+};
+
+const LINE = '<code>━━━━━━━━━━━━━━━━━━</code>';
+
 function flag(code: string): string {
   return FLAGS[code] || '💱';
 }
 
-const VIEW_RATES_BUTTON = "📊 Kursni ko'rish";
+const VIEW_RATES_BUTTON = "📊 Kurslar";
+const CALC_BUTTON = "🧮 Kalkulyator";
+const BANKS_BUTTON = "🏦 Banklar";
 const CONTACT_BUTTON = "📱 Telefon raqamni ulashish";
 const BANK_BOARD_CURRENCY = 'USD';
 const BANK_PAGE_SIZE = 8;
@@ -309,6 +318,13 @@ export async function stopBot(): Promise<void> {
   logger.info('Telegram bot stopped');
 }
 
+function mainReplyKeyboard() {
+  return Markup.keyboard([
+    [VIEW_RATES_BUTTON, CALC_BUTTON],
+    [BANKS_BUTTON],
+  ]).resize();
+}
+
 function contactRequestKeyboard() {
   return Markup.keyboard([
     [Markup.button.contactRequest(CONTACT_BUTTON)],
@@ -319,10 +335,10 @@ function contactRequestKeyboard() {
 
 async function promptForContact(ctx: Context, name: string): Promise<void> {
   await ctx.reply(
-    `Salom, ${name}! 👋\n\n` +
-      `💱 <b>Valyuta Tracker</b>\n\n` +
-      `Davom etish uchun pastdagi «${CONTACT_BUTTON}» tugmasini bosib telefon raqamingizni ulashing. ` +
-      `Raqamingiz faqat sizga kurslar haqida xabar yuborish uchun ishlatiladi.`,
+    `👋 Assalomu alaykum, <b>${name}</b>!\n\n` +
+      `💱 <b>Valyuta Tracker</b>'ga xush kelibsiz — O'zbekiston banklarining eng so'nggi kurslari shu yerda.\n\n` +
+      `Davom etish uchun pastdagi 📱 tugmani bosib telefon raqamingizni ulashing.\n` +
+      `<i>Raqamingiz faqat kurs xabarlari uchun ishlatiladi.</i>`,
     {
       parse_mode: 'HTML',
       ...contactRequestKeyboard(),
@@ -384,12 +400,17 @@ function registerHandlers(botInstance: Telegraf): void {
     }
 
     await ctx.reply(
-      `Salom, ${name}! 👋\n\n` +
+      `👋 Assalomu alaykum, <b>${name}</b>!\n\n` +
         `💱 <b>Valyuta Tracker</b>\n` +
-        `Pastdagi «${VIEW_RATES_BUTTON}» tugmasini bosing — Markaziy bank kurslari va banklar kesimini ko'rsataman.`,
+        `${LINE}\n` +
+        `📊  Eng yaxshi bank kurslari\n` +
+        `🧮  Valyuta kalkulyatori\n` +
+        `🏦  30+ bank kesimi\n` +
+        `🔔  Kunlik kurs xabarlari\n\n` +
+        `Boshlash uchun pastdagi tugmalardan foydalaning 👇`,
       {
         parse_mode: 'HTML',
-        ...Markup.keyboard([[VIEW_RATES_BUTTON]]).resize(),
+        ...mainReplyKeyboard(),
       }
     );
 
@@ -423,9 +444,9 @@ function registerHandlers(botInstance: Telegraf): void {
 
     const name = ctx.from.first_name || 'Foydalanuvchi';
     await ctx.reply(
-      `Rahmat, ${name}! ✅ Telefon raqamingiz saqlandi.\n\n` +
-        `Endi «${VIEW_RATES_BUTTON}» tugmasi orqali kurslarni ko'rishingiz mumkin.`,
-      Markup.keyboard([[VIEW_RATES_BUTTON]]).resize()
+      `✅ Rahmat, <b>${name}</b>! Hammasi tayyor.\n\n` +
+        `Endi pastdagi tugmalar orqali kurslar, kalkulyator va banklardan foydalanishingiz mumkin 👇`,
+      mainReplyKeyboard()
     );
     await sendTopRates(ctx, 'USD');
   });
@@ -456,6 +477,16 @@ function registerHandlers(botInstance: Telegraf): void {
   botInstance.hears(VIEW_RATES_BUTTON, async (ctx) => {
     await trackUser(ctx, 'view_rates_button');
     await sendTopRates(ctx, 'USD');
+  });
+
+  botInstance.hears(CALC_BUTTON, async (ctx) => {
+    await trackUser(ctx, 'calc_button');
+    await ctx.reply(CALC_HINT, { parse_mode: 'HTML' });
+  });
+
+  botInstance.hears(BANKS_BUTTON, async (ctx) => {
+    await trackUser(ctx, 'banks_button');
+    await sendBankBoard(ctx);
   });
 
   for (const currency of CURRENCIES) {
@@ -596,11 +627,14 @@ const CALC_SYMBOLS: Record<string, string> = {
 };
 
 const CALC_HINT =
-  '🧮 <b>Kalkulyator</b>\n\n' +
-  'Summa va valyutani yozing, men hisoblab beraman:\n' +
-  '• <code>100 USD</code> yoki <code>100$</code>\n' +
-  '• <code>100 EUR</code>, <code>5000 RUB</code>\n' +
-  "• <code>1000000 som</code> → dollar/yevro/rublda";
+  '🧮 <b>Kalkulyator</b>\n' +
+  LINE + '\n' +
+  'Summani yozing — men eng yaxshi kursda hisoblayman:\n\n' +
+  '💵  <code>100 USD</code>  yoki  <code>100$</code>\n' +
+  '💶  <code>50 EUR</code>\n' +
+  '💴  <code>5000 RUB</code>\n' +
+  '💰  <code>1000000</code>  → dollar/yevro/rublda\n\n' +
+  'Shunchaki yozib yuboring 👇';
 
 function topRatesKeyboard(currency: string, digestOn: boolean) {
   const curRow = RATE_CURRENCIES.map((c) =>
@@ -628,6 +662,8 @@ function topRatesKeyboard(currency: string, digestOn: boolean) {
 function formatTopRatesMessage(board: BankBoard, currency: string): string {
   const reporting = board.banks.filter((b) => b.hasRate);
   const cbRate = board.banks.find((b) => b.cbRate !== null)?.cbRate ?? null;
+  const name = CURRENCY_NAMES[currency] || currency;
+  const medals = ['🥇', '🥈', '🥉'];
 
   const bestBuy = reporting
     .filter((b) => b.buyRate !== null)
@@ -640,22 +676,23 @@ function formatTopRatesMessage(board: BankBoard, currency: string): string {
 
   const buyLines = bestBuy.length
     ? bestBuy
-        .map((b, i) => `${i + 1}. <b>${b.bank.nameUz}</b> — ${formatRate(b.buyRate)} so'm`)
+        .map((b, i) => `${medals[i]} ${b.bank.nameUz} — <b>${formatRate(b.buyRate)}</b>`)
         .join('\n')
-    : "Hozircha ma'lumot yo'q";
+    : "   Ma'lumot yo'q";
   const sellLines = bestSell.length
     ? bestSell
-        .map((b, i) => `${i + 1}. <b>${b.bank.nameUz}</b> — ${formatRate(b.sellRate)} so'm`)
+        .map((b, i) => `${medals[i]} ${b.bank.nameUz} — <b>${formatRate(b.sellRate)}</b>`)
         .join('\n')
-    : "Hozircha ma'lumot yo'q";
+    : "   Ma'lumot yo'q";
 
   return (
-    `${flag(currency)} <b>${currency} kursi</b>\n` +
-    `📅 ${board.date || ''}\n` +
-    `🏛 Markaziy bank: <b>${formatRate(cbRate)}</b> so'm\n\n` +
-    `💰 <b>Eng yaxshi sotib olish</b> (siz sotsangiz):\n${buyLines}\n\n` +
-    `🛒 <b>Eng yaxshi sotish</b> (siz olsangiz):\n${sellLines}\n\n` +
-    `Qamrov: ${board.reportingBanks}/${board.totalBanks} bank`
+    `${flag(currency)} <b>${name} · ${currency}</b>\n` +
+    `${LINE}\n` +
+    `🏛 Markaziy bank:  <b>${formatRate(cbRate)}</b> so'm\n` +
+    `📅 ${board.date || ''}\n\n` +
+    `📈 <b>Sotib olish</b> — eng baland\n${buyLines}\n\n` +
+    `📉 <b>Sotish</b> — eng arzon\n${sellLines}\n\n` +
+    `🏦 ${board.reportingBanks} ta bank · narxlar so'mda`
   );
 }
 
@@ -711,7 +748,8 @@ function parseCalcQuery(raw: string): { amount: number; code: string } | null {
     return { amount, code: 'UZS' };
   }
   if (token === 'RUBL' || token === 'РУБ') token = 'RUB';
-  if (CURRENCIES.includes(token)) return { amount, code: token };
+  // Istalgan 3 harfli valyuta kodi (CBU 74 valyuta) — mavjudligini handleCalc tekshiradi
+  if (/^[A-Z]{3}$/.test(token)) return { amount, code: token };
   return null;
 }
 
@@ -726,26 +764,44 @@ async function handleCalc(ctx: Context, amount: number, code: string): Promise<v
           const converted = (amount / cb).toLocaleString('uz-UZ', {
             maximumFractionDigits: 2,
           });
-          lines.push(`${flag(cur)} <b>${converted} ${cur}</b>`);
+          lines.push(`${flag(cur)}  <b>${converted}</b> ${cur}`);
         }
       }
       await ctx.reply(
-        `🧮 <b>${formatRate(amount)} so'm</b> =\n\n${lines.join('\n')}\n\n` +
-          `<i>Markaziy bank rasmiy kursi bo'yicha.</i>`,
+        `🧮 <b>Kalkulyator</b>\n${LINE}\n` +
+          `💰 <b>${formatRate(amount)}</b> so'm =\n\n${lines.join('\n')}\n\n` +
+          `<i>🏛 Markaziy bank kursi bo'yicha</i>`,
         { parse_mode: 'HTML' }
       );
       return;
     }
 
-    const details = await ratesService.getCurrencyDetails(code);
-    const cb = details.summary?.cbRate ?? null;
-    const bestBuy = details.summary?.bestBuy ?? null;
-    const bestSell = details.summary?.bestSell ?? null;
+    const board = await ratesService.getBankBoard(code);
+    const reporting = board.banks.filter((b) => b.hasRate);
+    const cb = board.banks.find((b) => b.cbRate !== null)?.cbRate ?? null;
+    const bestBuyBank = reporting
+      .filter((b) => b.buyRate !== null)
+      .sort((a, b) => (b.buyRate as number) - (a.buyRate as number))[0];
+    const bestSellBank = reporting
+      .filter((b) => b.sellRate !== null)
+      .sort((a, b) => (a.sellRate as number) - (b.sellRate as number))[0];
 
     const parts: string[] = [];
-    if (cb) parts.push(`🏛 Markaziy bank: <b>${formatRate(amount * cb)}</b> so'm`);
-    if (bestSell) parts.push(`🛒 Bankdan olsangiz: <b>${formatRate(amount * bestSell)}</b> so'm`);
-    if (bestBuy) parts.push(`💰 Bankka sotsangiz: <b>${formatRate(amount * bestBuy)}</b> so'm`);
+    if (cb) {
+      parts.push(`🏛 <b>Markaziy bank</b>\n     ${formatRate(amount * cb)} so'm`);
+    }
+    if (bestSellBank) {
+      parts.push(
+        `🛒 <b>Sotib olsangiz</b> · ${bestSellBank.bank.nameUz}\n` +
+          `     ${formatRate(amount * (bestSellBank.sellRate as number))} so'm`
+      );
+    }
+    if (bestBuyBank) {
+      parts.push(
+        `💸 <b>Sotsangiz</b> · ${bestBuyBank.bank.nameUz}\n` +
+          `     ${formatRate(amount * (bestBuyBank.buyRate as number))} so'm`
+      );
+    }
 
     if (parts.length === 0) {
       await ctx.reply(`${code} uchun hozircha kurs ma'lumoti yo'q.`, { parse_mode: 'HTML' });
@@ -754,7 +810,8 @@ async function handleCalc(ctx: Context, amount: number, code: string): Promise<v
 
     const amountStr = amount.toLocaleString('uz-UZ', { maximumFractionDigits: 2 });
     await ctx.reply(
-      `🧮 <b>${amountStr} ${code}</b> ${flag(code)} =\n\n${parts.join('\n')}`,
+      `🧮 <b>Kalkulyator</b>\n${LINE}\n` +
+        `${flag(code)} <b>${amountStr} ${code}</b> =\n\n${parts.join('\n\n')}`,
       { parse_mode: 'HTML' }
     );
   } catch (error) {
@@ -947,11 +1004,19 @@ export interface BroadcastResult {
   failed: number;
 }
 
+export interface BroadcastMedia {
+  imageUrl?: string;
+  fileBase64?: string;
+  fileName?: string;
+  mimeType?: string;
+}
+
 // Admin panel orqali barcha faol foydalanuvchilarga xabar yuborish.
-// Matn majburiy; rasm (imageUrl) ixtiyoriy — bo'lsa rasm + caption yuboriladi.
+// Matn ixtiyoriy; rasm URL yoki yuklangan fayl (base64) qo'shilishi mumkin.
+// Yuklangan fayl bir marta yuklanadi, keyin file_id qayta ishlatiladi (tezlik uchun).
 export async function broadcastToUsers(
   text: string,
-  imageUrl?: string
+  media?: BroadcastMedia
 ): Promise<BroadcastResult> {
   if (!isTelegramBotConfigured()) {
     throw new Error('Telegram bot is not configured');
@@ -962,13 +1027,47 @@ export async function broadcastToUsers(
 
   let sent = 0;
   let failed = 0;
-  const caption = text?.trim() || undefined;
+  const rawCaption = text?.trim() || '';
+  const hasMedia = Boolean(media?.fileBase64 || media?.imageUrl);
+  // Media uchun caption limiti 1024 belgi (Telegram cheklovi).
+  const caption = hasMedia
+    ? rawCaption
+      ? rawCaption.slice(0, 1024)
+      : undefined
+    : rawCaption || undefined;
+
+  const buffer = media?.fileBase64
+    ? Buffer.from(media.fileBase64, 'base64')
+    : null;
+  const isImage = (media?.mimeType || '').startsWith('image/');
+  const fileName = media?.fileName || 'file';
+  let cachedFileId: string | null = null;
 
   for (const user of users) {
     const chatId = Number(user.telegramId);
     try {
-      if (imageUrl) {
-        await botInstance.telegram.sendPhoto(chatId, imageUrl, {
+      if (buffer) {
+        if (isImage) {
+          const input: any = cachedFileId ?? { source: buffer };
+          const msg = await botInstance.telegram.sendPhoto(chatId, input, {
+            caption,
+            parse_mode: 'HTML',
+          });
+          if (!cachedFileId && 'photo' in msg && msg.photo.length) {
+            cachedFileId = msg.photo[msg.photo.length - 1].file_id;
+          }
+        } else {
+          const input: any = cachedFileId ?? { source: buffer, filename: fileName };
+          const msg = await botInstance.telegram.sendDocument(chatId, input, {
+            caption,
+            parse_mode: 'HTML',
+          });
+          if (!cachedFileId && 'document' in msg && msg.document) {
+            cachedFileId = msg.document.file_id;
+          }
+        }
+      } else if (media?.imageUrl) {
+        await botInstance.telegram.sendPhoto(chatId, media.imageUrl, {
           caption,
           parse_mode: 'HTML',
         });

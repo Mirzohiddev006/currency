@@ -54,8 +54,14 @@ export const broadcastSchema = z
   .object({
     text: z.string().trim().max(4000).optional().default(''),
     imageUrl: z.string().trim().url('Rasm URL manzili xato').optional().or(z.literal('')),
+    fileBase64: z.string().optional(),
+    fileName: z.string().max(255).optional(),
+    mimeType: z.string().max(100).optional(),
   })
   .refine(
-    (data) => (data.text && data.text.length > 0) || (data.imageUrl && data.imageUrl.length > 0),
-    { message: 'Matn yoki rasm URL manzilidan kamida bittasi kiritilishi shart' }
+    (data) =>
+      (data.text && data.text.length > 0) ||
+      (data.imageUrl && data.imageUrl.length > 0) ||
+      (data.fileBase64 && data.fileBase64.length > 0),
+    { message: 'Matn, rasm yoki fayldan kamida bittasi kiritilishi shart' }
   );
