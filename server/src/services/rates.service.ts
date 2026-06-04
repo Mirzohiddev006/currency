@@ -680,9 +680,43 @@ export class RatesService {
   }
 
   private async getLatestCBUSnapshot(): Promise<CBURateResponse[]> {
-    return cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, () =>
-      fetchCBURates(),
-    );
+    try {
+      return await cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, () =>
+        fetchCBURates(),
+      );
+    } catch (error: any) {
+      logger.warn(
+        `CBU API unavailable, falling back to database snapshot: ${error.message}`,
+      );
+
+      const cbuBank = await ratesRepository.getBankByCode("cbu");
+      if (!cbuBank) {
+        throw error;
+      }
+
+      const latestRates = await ratesRepository.getLatestRatesForBank(cbuBank.id);
+      const fallbackSnapshot = latestRates
+        .filter((rate) => rate.cbRate !== null)
+        .map((rate) => ({
+          id: rate.id,
+          Code: rate.code,
+          Ccy: rate.code,
+          CcyNm_RU: rate.currency,
+          CcyNm_UZ: rate.currency,
+          CcyNm_UZC: rate.currency,
+          CcyNm_EN: rate.currency,
+          Nominal: "1",
+          Rate: String(rate.cbRate),
+          Diff: "0",
+          Date: rate.date.toISOString(),
+        }));
+
+      if (fallbackSnapshot.length === 0) {
+        throw error;
+      }
+
+      return fallbackSnapshot;
+    }
   }
 
   private buildCurrencySummary(
