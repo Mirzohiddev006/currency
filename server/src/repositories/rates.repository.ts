@@ -60,6 +60,15 @@ export class RatesRepository {
     });
   }
 
+  async getAllLatestRates(currency?: string) {
+    return prisma.exchangeRate.findMany({
+      where: currency ? { code: currency.toUpperCase() } : undefined,
+      orderBy: [{ bankId: 'asc' }, { code: 'asc' }, { date: 'desc' }],
+      distinct: ['bankId', 'code'],
+      include: { bank: true },
+    });
+  }
+
   async getLatestRatesForBank(bankId: string, currency?: string) {
     if (currency) {
       return prisma.exchangeRate.findMany({

@@ -263,7 +263,7 @@ export const CACHE_KEYS = {
 } as const;
 
 export const CACHE_TTL = {
-  RATES: 300,          // 5 minutes
+  RATES: 600,          // 10 minutes
   DASHBOARD: 60,       // 1 minute
   ANALYTICS: 120,      // 2 minutes
   HISTORY: 600,        // 10 minutes

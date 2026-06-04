@@ -337,16 +337,17 @@ export class RatesService {
       : CACHE_KEYS.LATEST_RATES;
 
     return cacheGetOrSet(cacheKey, CACHE_TTL.RATES, async () => {
-      const banks = await ratesRepository.getActiveBanks();
-      const result: LatestRateGroup[] = [];
+      const rows = await ratesRepository.getAllLatestRates(currency);
+      const byBank = new Map<string, LatestRateGroup>();
 
-      for (const bank of banks) {
-        const rates = await ratesRepository.getLatestRatesForBank(
-          bank.id,
-          currency,
-        );
-        if (rates.length > 0) {
-          result.push({
+      for (const row of rows) {
+        const bank = row.bank;
+        if (!bank || !bank.isActive) {
+          continue;
+        }
+        let group = byBank.get(bank.id);
+        if (!group) {
+          group = {
             bank: {
               id: bank.id,
               code: bank.code,
@@ -357,12 +358,15 @@ export class RatesService {
               isCentral: bank.isCentral,
               isActive: bank.isActive,
             },
-            rates,
-          });
+            rates: [],
+          };
+          byBank.set(bank.id, group);
         }
+        const { bank: _bankOmit, ...rate } = row;
+        group.rates.push(rate);
       }
 
-      return result;
+      return [...byBank.values()];
     });
   }
 
@@ -680,45 +684,49 @@ export class RatesService {
   }
 
   private async getLatestCBUSnapshot(): Promise<CBURateResponse[]> {
-    try {
-      return await cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, () =>
-        fetchCBURates(),
-      );
-    } catch (error: any) {
-      logger.warn(
-        `CBU API unavailable, falling back to database snapshot: ${error.message}`,
-      );
-
+    return cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, async () => {
+      // TEZLIK: avval bazadan (scraper CBU'ni yozib boradi).
+      // Jonli CBU API faqat baza bo'sh bo'lsa ishlatiladi.
       const cbuBank = await ratesRepository.getBankByCode("cbu");
-      if (!cbuBank) {
-        throw error;
+      if (cbuBank) {
+        const latestRates = await ratesRepository.getLatestRatesForBank(
+          cbuBank.id,
+        );
+        const snapshot: CBURateResponse[] = latestRates
+          .filter((rate) => rate.cbRate !== null)
+          .map((rate) => {
+            const d = new Date(rate.date);
+            const dateStr = `${String(d.getDate()).padStart(2, "0")}.${String(
+              d.getMonth() + 1,
+            ).padStart(2, "0")}.${d.getFullYear()}`;
+            return {
+              id: rate.id,
+              Code: rate.code,
+              Ccy: rate.code,
+              CcyNm_RU: rate.currency,
+              CcyNm_UZ: rate.currency,
+              CcyNm_UZC: rate.currency,
+              CcyNm_EN: rate.currency,
+              Nominal: "1",
+              Rate: String(rate.cbRate),
+              Diff: "0",
+              Date: dateStr,
+            };
+          });
+
+        if (snapshot.length > 0) {
+          return snapshot.sort((a, b) => {
+            const ai = PRIORITY_CURRENCIES.indexOf(a.Ccy);
+            const bi = PRIORITY_CURRENCIES.indexOf(b.Ccy);
+            if (ai !== -1 && bi !== -1) return ai - bi;
+            if (ai !== -1) return -1;
+            if (bi !== -1) return 1;
+            return a.Ccy.localeCompare(b.Ccy);
+          });
+        }
       }
-
-      const latestRates = await ratesRepository.getLatestRatesForBank(
-        cbuBank.id,
-      );
-      const fallbackSnapshot = latestRates
-        .filter((rate) => rate.cbRate !== null)
-        .map((rate) => ({
-          id: rate.id,
-          Code: rate.code,
-          Ccy: rate.code,
-          CcyNm_RU: rate.currency,
-          CcyNm_UZ: rate.currency,
-          CcyNm_UZC: rate.currency,
-          CcyNm_EN: rate.currency,
-          Nominal: "1",
-          Rate: String(rate.cbRate),
-          Diff: "0",
-          Date: rate.date.toISOString(),
-        }));
-
-      if (fallbackSnapshot.length === 0) {
-        throw error;
-      }
-
-      return fallbackSnapshot;
-    }
+      return fetchCBURates();
+    });
   }
 
   private buildCurrencySummary(

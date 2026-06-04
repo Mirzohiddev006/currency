@@ -552,12 +552,12 @@ function registerHandlers(botInstance: Telegraf): void {
   for (const currency of CURRENCIES) {
     botInstance.command(currency.toLowerCase(), async (ctx) => {
       void trackUser(ctx, `/${currency.toLowerCase()}`);
-      await sendCurrencyDetails(ctx, currency);
+      await sendTopRates(ctx, currency);
     });
 
     botInstance.hears(currency, async (ctx) => {
       void trackUser(ctx, `${currency} button`);
-      await sendCurrencyDetails(ctx, currency);
+      await sendTopRates(ctx, currency);
     });
   }
 
@@ -565,7 +565,7 @@ function registerHandlers(botInstance: Telegraf): void {
     void safeAnswerCbQuery(ctx);
     const currency = ctx.match[1];
     void trackUser(ctx, `currency:${currency}`);
-    await sendCurrencyDetails(ctx, currency);
+    await sendTopRates(ctx, currency);
   });
 
   botInstance.action(/^banks:(\d+)$/, async (ctx) => {
@@ -637,7 +637,7 @@ function registerHandlers(botInstance: Telegraf): void {
     const text = raw.toUpperCase();
     if (CURRENCIES.includes(text)) {
       void trackUser(ctx, text);
-      await sendCurrencyDetails(ctx, text);
+      await sendTopRates(ctx, text);
       return;
     }
 
@@ -1017,24 +1017,21 @@ async function trackUser(ctx: Context, command: string): Promise<void> {
   if (!ctx.from) {
     return;
   }
-
-  try {
-    const telegramId = BigInt(ctx.from.id);
-
-    await userRepository.upsertByTelegramId({
-      telegramId,
-      username: ctx.from.username,
-      firstName: ctx.from.first_name,
-      lastName: ctx.from.last_name,
-    });
-
-    const user = await userRepository.findByTelegramId(telegramId);
-    if (user) {
+  const from = ctx.from;
+  // Foydalanuvchi yozuvi va so'rov logi FONDA bajariladi — javobni kechiktirmaydi.
+  void (async () => {
+    try {
+      const user = await userRepository.upsertByTelegramId({
+        telegramId: BigInt(from.id),
+        username: from.username,
+        firstName: from.first_name,
+        lastName: from.last_name,
+      });
       await userRepository.logRequest(user.id, command);
+    } catch (error) {
+      logger.error("trackUser error:", error);
     }
-  } catch (error) {
-    logger.error("trackUser error:", error);
-  }
+  })();
 }
 
 // Yangi foydalanuvchi /start bosganda fon rejimida kurslarni yangilaymiz.
