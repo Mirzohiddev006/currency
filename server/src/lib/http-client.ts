@@ -22,7 +22,7 @@ export const scraperHttpClient = axios.create({
 });
 
 export const cbuHttpClient = axios.create({
-  timeout: 15000,
+  timeout: 8000,
   headers: {
     "User-Agent": "Mozilla/5.0 (compatible; CurrencyTracker/1.0)",
     Accept: "application/json",

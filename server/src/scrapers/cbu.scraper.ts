@@ -21,7 +21,7 @@ export async function fetchCBURates(): Promise<CBURateResponse[]> {
 
       return sortByPriority(response.data);
     },
-    { maxRetries: 3, label: 'CBU API' }
+    { maxRetries: 1, label: 'CBU API' }
   );
 }
 

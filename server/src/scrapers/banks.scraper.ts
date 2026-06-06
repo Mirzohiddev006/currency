@@ -4,7 +4,7 @@ import { BANK_UZ_BANKS } from "../config/banks";
 import { logger } from "../config/logger";
 import { scraperHttpClient } from "../lib/http-client";
 import { withRetry } from "../lib/retry";
-import { BankRateResult, ScrapeResult } from "../types";
+import { BankRateResult, CBURateResponse, ScrapeResult } from "../types";
 
 const BANK_UZ_BASE_URL = "https://bank.uz";
 const SCRAPE_CONCURRENCY = 5;
@@ -443,4 +443,90 @@ export async function scrapeAllBanks(): Promise<ScrapeResult[]> {
       }
     },
   );
+}
+
+
+// ── CBU zaxira manbasi ────────────────────────────────────
+// cbu.uz API ishlamasa, Markaziy bank kursini bank o'z saytlaridagi
+// "MB kursi" ustunidan olamiz (asosiy valyutalar uchun).
+const CBU_FALLBACK_SITES = [
+  "https://ipotekabank.uz/uz/currency",
+  "https://trustbank.uz/uz",
+];
+
+export async function fetchCbuFromBankSite(): Promise<CBURateResponse[]> {
+  const today = new Date();
+  const dateStr = `${String(today.getDate()).padStart(2, "0")}.${String(
+    today.getMonth() + 1,
+  ).padStart(2, "0")}.${today.getFullYear()}`;
+
+  const MB_RE = /\bmb\b|markaziy|\u0446\u0431|o.zb mb/i;
+
+  for (const url of CBU_FALLBACK_SITES) {
+    try {
+      const { data } = await scraperHttpClient.get(url);
+      const $ = cheerio.load(data);
+      const out: CBURateResponse[] = [];
+      const seen = new Set<string>();
+
+      $("table").each((_tableIdx, table) => {
+        if (out.length > 0) {
+          return;
+        }
+        const rows = $(table).find("tr");
+        if (rows.length < 2) {
+          return;
+        }
+        // "MB kursi" ustunini sarlavhadan topamiz
+        const headerCells = $(rows[0]).find("th,td");
+        let mbIdx = -1;
+        headerCells.each((i, c) => {
+          if (mbIdx === -1 && MB_RE.test($(c).text())) {
+            mbIdx = i;
+          }
+        });
+        if (mbIdx === -1) {
+          return;
+        }
+
+        rows.slice(1).each((_rowIdx, row) => {
+          const cells = $(row).find("th,td");
+          if (mbIdx >= cells.length) {
+            return;
+          }
+          const code = extractCurrencyCode($(cells[0]).text());
+          if (!code || seen.has(code)) {
+            return;
+          }
+          const mb = parseRate($(cells[mbIdx]).text());
+          if (!mb) {
+            return;
+          }
+          seen.add(code);
+          out.push({
+            id: "",
+            Code: code,
+            Ccy: code,
+            CcyNm_RU: "",
+            CcyNm_UZ: code,
+            CcyNm_UZC: "",
+            CcyNm_EN: code,
+            Nominal: "1",
+            Rate: String(mb),
+            Diff: "0",
+            Date: dateStr,
+          });
+        });
+      });
+
+      if (out.length > 0) {
+        logger.info(`CBU zaxira: ${out.length} ta kurs (${url})`);
+        return out;
+      }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      logger.warn(`CBU zaxira ${url} ishlamadi: ${msg}`);
+    }
+  }
+  throw new Error("CBU zaxira: bank saytlaridan MB kursi olinmadi");
 }

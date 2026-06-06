@@ -4,7 +4,11 @@ import { logger } from "../config/logger";
 import { cacheGetOrSet, cacheInvalidatePattern } from "../lib/cache";
 import { NotFoundError } from "../lib/errors";
 import { fetchCBURates } from "../scrapers/cbu.scraper";
-import { scrapeAllBanks, scrapeBank } from "../scrapers/banks.scraper";
+import {
+  scrapeAllBanks,
+  scrapeBank,
+  fetchCbuFromBankSite,
+} from "../scrapers/banks.scraper";
 import { ratesRepository } from "../repositories";
 import {
   BankCoverageSummary,
@@ -136,6 +140,77 @@ function compareCurrencyPriority(left: string, right: string): number {
   return left.localeCompare(right);
 }
 
+// ── CBU snapshot (stale-while-revalidate) ─────────────────
+// CBU jonli olinadi (eng yangi). Ishlamasa: bank saytidagi MB ustuni,
+// undan keyin baza. Kesh + fon yangilash bilan javob har doim tez.
+let cbuSnapshotCache: { data: CBURateResponse[]; at: number } | null = null;
+let cbuRefreshing = false;
+const CBU_FRESH_MS = 30 * 60 * 1000;
+
+function sortCbuByPriority(snapshot: CBURateResponse[]): CBURateResponse[] {
+  return [...snapshot].sort((a, b) => {
+    const ai = PRIORITY_CURRENCIES.indexOf(a.Ccy);
+    const bi = PRIORITY_CURRENCIES.indexOf(b.Ccy);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.Ccy.localeCompare(b.Ccy);
+  });
+}
+
+async function readCbuFromDb(): Promise<CBURateResponse[]> {
+  const cbuBank = await ratesRepository.getBankByCode("cbu");
+  if (!cbuBank) return [];
+  const latestRates = await ratesRepository.getLatestRatesForBank(cbuBank.id);
+  const snapshot: CBURateResponse[] = latestRates
+    .filter((rate) => rate.cbRate !== null)
+    .map((rate) => {
+      const d = new Date(rate.date);
+      const dateStr = `${String(d.getDate()).padStart(2, "0")}.${String(
+        d.getMonth() + 1,
+      ).padStart(2, "0")}.${d.getFullYear()}`;
+      return {
+        id: rate.id,
+        Code: rate.code,
+        Ccy: rate.code,
+        CcyNm_RU: rate.currency,
+        CcyNm_UZ: rate.currency,
+        CcyNm_UZC: rate.currency,
+        CcyNm_EN: rate.currency,
+        Nominal: "1",
+        Rate: String(rate.cbRate),
+        Diff: "0",
+        Date: dateStr,
+      };
+    });
+  return sortCbuByPriority(snapshot);
+}
+
+async function refreshCbuSnapshot(): Promise<CBURateResponse[]> {
+  if (cbuRefreshing && cbuSnapshotCache) {
+    return cbuSnapshotCache.data;
+  }
+  cbuRefreshing = true;
+  try {
+    let data: CBURateResponse[];
+    try {
+      data = sortCbuByPriority(await fetchCBURates()); // 1) jonli cbu.uz
+    } catch {
+      try {
+        data = sortCbuByPriority(await fetchCbuFromBankSite()); // 2) bank MB ustuni
+      } catch {
+        data = await readCbuFromDb(); // 3) baza (oxirgi zaxira)
+      }
+    }
+    if (data.length > 0) {
+      cbuSnapshotCache = { data, at: Date.now() };
+    }
+    return cbuSnapshotCache?.data ?? data;
+  } finally {
+    cbuRefreshing = false;
+  }
+}
+
 export class RatesService {
   async ensureBanksExist(): Promise<void> {
     for (const bank of BANKS_SEED) {
@@ -153,7 +228,16 @@ export class RatesService {
     logger.info("Starting full rates refresh");
 
     try {
-      const cbuRates = await fetchCBURates();
+      // cbu.uz ishlamasa — bank saytidagi MB ustunidan zaxira olamiz.
+      let cbuRates;
+      try {
+        cbuRates = await fetchCBURates();
+      } catch (cbuErr: any) {
+        logger.warn(
+          `CBU API ishlamadi, bank saytidan olinmoqda: ${cbuErr.message}`,
+        );
+        cbuRates = await fetchCbuFromBankSite();
+      }
       const cbuBank = await ratesRepository.getBankByCode("cbu");
 
       if (cbuBank) {
@@ -684,49 +768,15 @@ export class RatesService {
   }
 
   private async getLatestCBUSnapshot(): Promise<CBURateResponse[]> {
-    return cacheGetOrSet(CACHE_KEYS.CBU_SNAPSHOT, CACHE_TTL.RATES, async () => {
-      // TEZLIK: avval bazadan (scraper CBU'ni yozib boradi).
-      // Jonli CBU API faqat baza bo'sh bo'lsa ishlatiladi.
-      const cbuBank = await ratesRepository.getBankByCode("cbu");
-      if (cbuBank) {
-        const latestRates = await ratesRepository.getLatestRatesForBank(
-          cbuBank.id,
-        );
-        const snapshot: CBURateResponse[] = latestRates
-          .filter((rate) => rate.cbRate !== null)
-          .map((rate) => {
-            const d = new Date(rate.date);
-            const dateStr = `${String(d.getDate()).padStart(2, "0")}.${String(
-              d.getMonth() + 1,
-            ).padStart(2, "0")}.${d.getFullYear()}`;
-            return {
-              id: rate.id,
-              Code: rate.code,
-              Ccy: rate.code,
-              CcyNm_RU: rate.currency,
-              CcyNm_UZ: rate.currency,
-              CcyNm_UZC: rate.currency,
-              CcyNm_EN: rate.currency,
-              Nominal: "1",
-              Rate: String(rate.cbRate),
-              Diff: "0",
-              Date: dateStr,
-            };
-          });
-
-        if (snapshot.length > 0) {
-          return snapshot.sort((a, b) => {
-            const ai = PRIORITY_CURRENCIES.indexOf(a.Ccy);
-            const bi = PRIORITY_CURRENCIES.indexOf(b.Ccy);
-            if (ai !== -1 && bi !== -1) return ai - bi;
-            if (ai !== -1) return -1;
-            if (bi !== -1) return 1;
-            return a.Ccy.localeCompare(b.Ccy);
-          });
-        }
+    // Kesh bor: darhol qaytaramiz; eskirgan bo'lsa fonda yangilaymiz (SWR).
+    if (cbuSnapshotCache) {
+      if (Date.now() - cbuSnapshotCache.at >= CBU_FRESH_MS) {
+        void refreshCbuSnapshot();
       }
-      return fetchCBURates();
-    });
+      return cbuSnapshotCache.data;
+    }
+    // Birinchi marta — yangilab kutamiz.
+    return refreshCbuSnapshot();
   }
 
   private buildCurrencySummary(
