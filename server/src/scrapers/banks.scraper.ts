@@ -450,34 +450,38 @@ export async function scrapeAllBanks(): Promise<ScrapeResult[]> {
 // cbu.uz API ishlamasa, Markaziy bank kursini bank o'z saytlaridagi
 // "MB kursi" ustunidan olamiz (asosiy valyutalar uchun).
 const CBU_FALLBACK_SITES = [
-  "https://ipotekabank.uz/uz/currency",
   "https://trustbank.uz/uz",
+  "https://aab.uz/uz",
+  "https://mkbank.uz/uz",
+  "https://aloqabank.uz/uz",
 ];
 
 export async function fetchCbuFromBankSite(): Promise<CBURateResponse[]> {
+  const MB_RE = /\bmb\b|markaziy|\u0446\u0431|o.zb/i;
   const today = new Date();
   const dateStr = `${String(today.getDate()).padStart(2, "0")}.${String(
     today.getMonth() + 1,
   ).padStart(2, "0")}.${today.getFullYear()}`;
 
-  const MB_RE = /\bmb\b|markaziy|\u0446\u0431|o.zb mb/i;
+  // Bir nechta bankning "MB kursi" ustunini yig'amiz; har valyuta uchun
+  // MEDIAN qiymatni olamiz — bitta bank noto'g'ri ko'rsatsa ham to'g'ri chiqadi.
+  const collected = new Map<string, number[]>();
 
-  for (const url of CBU_FALLBACK_SITES) {
+  const responses = await Promise.allSettled(
+    CBU_FALLBACK_SITES.map((url) => scraperHttpClient.get(url)),
+  );
+
+  for (const res of responses) {
+    if (res.status !== "fulfilled") {
+      continue;
+    }
     try {
-      const { data } = await scraperHttpClient.get(url);
-      const $ = cheerio.load(data);
-      const out: CBURateResponse[] = [];
-      const seen = new Set<string>();
-
+      const $ = cheerio.load(res.value.data);
       $("table").each((_tableIdx, table) => {
-        if (out.length > 0) {
-          return;
-        }
         const rows = $(table).find("tr");
         if (rows.length < 2) {
           return;
         }
-        // "MB kursi" ustunini sarlavhadan topamiz
         const headerCells = $(rows[0]).find("th,td");
         let mbIdx = -1;
         headerCells.each((i, c) => {
@@ -488,45 +492,55 @@ export async function fetchCbuFromBankSite(): Promise<CBURateResponse[]> {
         if (mbIdx === -1) {
           return;
         }
-
+        const seenInTable = new Set<string>();
         rows.slice(1).each((_rowIdx, row) => {
           const cells = $(row).find("th,td");
           if (mbIdx >= cells.length) {
             return;
           }
           const code = extractCurrencyCode($(cells[0]).text());
-          if (!code || seen.has(code)) {
+          if (!code || seenInTable.has(code)) {
             return;
           }
           const mb = parseRate($(cells[mbIdx]).text());
           if (!mb) {
             return;
           }
-          seen.add(code);
-          out.push({
-            id: "",
-            Code: code,
-            Ccy: code,
-            CcyNm_RU: "",
-            CcyNm_UZ: code,
-            CcyNm_UZC: "",
-            CcyNm_EN: code,
-            Nominal: "1",
-            Rate: String(mb),
-            Diff: "0",
-            Date: dateStr,
-          });
+          seenInTable.add(code);
+          const arr = collected.get(code) || [];
+          arr.push(mb);
+          collected.set(code, arr);
         });
       });
-
-      if (out.length > 0) {
-        logger.info(`CBU zaxira: ${out.length} ta kurs (${url})`);
-        return out;
-      }
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      logger.warn(`CBU zaxira ${url} ishlamadi: ${msg}`);
+    } catch {
+      // bitta sayt buzilsa — boshqasi bilan davom etamiz
     }
   }
-  throw new Error("CBU zaxira: bank saytlaridan MB kursi olinmadi");
+
+  const out: CBURateResponse[] = [];
+  for (const [code, values] of collected) {
+    values.sort((a, b) => a - b);
+    const median = values[Math.floor(values.length / 2)];
+    out.push({
+      id: "",
+      Code: code,
+      Ccy: code,
+      CcyNm_RU: "",
+      CcyNm_UZ: code,
+      CcyNm_UZC: "",
+      CcyNm_EN: code,
+      Nominal: "1",
+      Rate: String(median),
+      Diff: "0",
+      Date: dateStr,
+    });
+  }
+
+  if (out.length === 0) {
+    throw new Error("CBU zaxira: bank saytlaridan MB kursi olinmadi");
+  }
+  logger.info(
+    `CBU zaxira: ${out.length} ta kurs (median, ${CBU_FALLBACK_SITES.length} bank)`,
+  );
+  return out;
 }
