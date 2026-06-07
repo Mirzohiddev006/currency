@@ -194,13 +194,23 @@ async function refreshCbuSnapshot(): Promise<CBURateResponse[]> {
   try {
     let data: CBURateResponse[];
     try {
-      data = sortCbuByPriority(await fetchCBURates()); // 1) jonli cbu.uz
+      // 1) Jonli cbu.uz — to'liq 74 valyuta, eng yangi
+      data = sortCbuByPriority(await fetchCBURates());
     } catch {
+      // cbu.uz ishlamadi: baza (to'liq 74 valyuta) ni asos qilamiz va
+      // ustiga bank-MB (yangi asosiy valyutalar) ni qo'shamiz.
+      // Shunda KRW kabi valyutalar ham yo'qolmaydi.
+      const dbRates = await readCbuFromDb();
+      let bankRates: CBURateResponse[] = [];
       try {
-        data = sortCbuByPriority(await fetchCbuFromBankSite()); // 2) bank MB ustuni
+        bankRates = await fetchCbuFromBankSite();
       } catch {
-        data = await readCbuFromDb(); // 3) baza (oxirgi zaxira)
+        // bank-MB ham ishlamadi — faqat baza bilan davom etamiz
       }
+      const byCode = new Map<string, CBURateResponse>();
+      for (const r of dbRates) byCode.set(r.Ccy, r);
+      for (const r of bankRates) byCode.set(r.Ccy, r); // yangi qiymat ustun turadi
+      data = sortCbuByPriority([...byCode.values()]);
     }
     if (data.length > 0) {
       cbuSnapshotCache = { data, at: Date.now() };
